@@ -1,0 +1,82 @@
+@Metadata.layer: #CORE
+@UI: {
+    headerInfo: { typeName: 'Item',
+                  typeNamePlural: 'Items',
+                  title: { type: #STANDARD, value: 'ItemID' } },
+    presentationVariant: [{ sortOrder: [{ by: 'ItemID', direction: #ASC }] }] }
+annotate entity ZC_ITEM_001 with 
+{
+    @UI.facet: [
+        {
+            id:            'Item',
+            purpose:       #STANDARD,
+            type:          #IDENTIFICATION_REFERENCE,
+            label:         'Item',
+            position:      10
+        }
+    ]
+
+    @UI: {  lineItem:       [ { position: 10, label: 'Item UUID', cssDefault.width: '300px' } ],
+            identification: [ { position: 10, label: 'Item UUID' } ] }
+    @UI.hidden: true
+    ItemUUID;
+
+    @UI: {  lineItem:       [ { position: 20, label: 'Product UUID', cssDefault.width: '300px' } ],
+            identification: [ { position: 20, label: 'Product UUID' } ] }
+    @UI.hidden: true
+    ProductUUID;
+
+    @UI: {  lineItem:       [ { position: 30, label: 'Item ID', cssDefault.width: '300px' } ],
+            identification: [ { position: 30, label: 'Item ID' } ] }
+    ItemID;
+
+    @UI: {  lineItem:       [ { position: 40, label: 'Product', cssDefault.width: '300px', type: #WITH_URL, url: 'ProductURL' } ],
+            identification: [ { position: 40, label: 'Product' } ] }
+    Product;
+
+    @UI: {  lineItem:       [ { position: 50, label: 'Status', cssDefault.width: '300px', criticality:'Criticality01', criticalityRepresentation: #WITH_ICON } ],
+            identification: [ { position: 50, label: 'Status' } ] }
+    Status;
+
+    @UI: {  lineItem:       [ { position: 60, label: 'Description', cssDefault.width: '300px' } ],
+            identification: [ { position: 60, label: 'Description' } ] }
+    @UI.hidden: true
+    Description; 
+
+    @UI.hidden: true
+    ProductURL;
+
+    @UI.hidden: true
+    Model;
+
+    @UI.hidden: true
+    Color;
+
+    @UI.hidden: true
+    CupSize;
+
+    @UI.hidden: true
+    BackSize;
+
+    @UI.hidden: true
+    Criticality01;
+
+    @UI.hidden: true
+    Checkbox01;
+
+    @UI.hidden: true
+    CreatedBy;
+
+    @UI.hidden: true
+    CreatedAt;
+
+    @UI.hidden: true
+    LastChangedBy;
+
+    @UI.hidden: true
+    LastChangedAt;
+
+    @UI.hidden: true
+    LocalLastChangedAt;
+
+}

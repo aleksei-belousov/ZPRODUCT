@@ -1,0 +1,16 @@
+managed implementation in class zbp_i_bool_001 unique;
+strict ( 2 );
+
+define behavior for ZI_BOOL_001 alias Bool
+persistent table zbool001
+lock master
+authorization master ( instance )
+//late numbering
+//etag master <field_name>
+{
+  create;
+  update;
+  delete;
+
+  field ( numbering : managed, readonly ) UUID;
+}

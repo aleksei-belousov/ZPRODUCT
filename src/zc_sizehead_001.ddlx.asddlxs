@@ -1,0 +1,108 @@
+@Metadata.layer: #CORE
+@UI: {
+    headerInfo: { typeName: 'SizeHead',
+                  typeNamePlural: 'SizeHeads',
+                  title: { type: #STANDARD, value: 'SizeHeadID' } },
+    presentationVariant: [{ sortOrder: [{ by: 'SizeHeadID', direction: #ASC }] }] }
+annotate entity ZC_SIZEHEAD_001 with 
+{
+
+    @UI.facet: [
+        {
+            id:            'SizeHeadID',
+            purpose:       #STANDARD,
+            type:          #IDENTIFICATION_REFERENCE,
+            label:         'SizeHead',
+            position:      10
+        }
+    ]
+
+    @UI: {  lineItem:       [ { position: 10, label: 'Size Head UUID', cssDefault.width: '300px' } ],
+            identification: [ { position: 10, label: 'Size Head UUID' } ] }
+    @UI.hidden: true
+    SizeHeadUUID;
+
+    @UI: {  lineItem:       [ { position: 20, label: 'Product UUID', cssDefault.width: '300px' } ],
+            identification: [ { position: 20, label: 'Product UUID' } ] }
+    @UI.hidden: true
+    ProductUUID;
+
+    @UI: {  lineItem:       [ { position: 30, label: 'Size Head ID', cssDefault.width: '300px' } ],
+            identification: [ { position: 30, label: 'Size Head ID' } ] }
+    SizeHeadID;
+
+    @UI: {  lineItem:       [ { position: 40, label: 'Back', cssDefault.width: '300px' } ],
+            identification: [ { position: 40, label: 'Back' } ] }
+    Back;
+
+    @UI: {  lineItem:       [ { position: 50, label: 'A', cssDefault.width: '300px' } ],
+            identification: [ { position: 50, label: 'A' } ] }
+    A;
+
+    @UI: {  lineItem:       [ { position: 60, label: 'B', cssDefault.width: '300px' } ],
+            identification: [ { position: 60, label: 'B' } ] }
+    B;
+
+    @UI: {  lineItem:       [ { position: 70, label: 'C', cssDefault.width: '300px' } ],
+            identification: [ { position: 70, label: 'C' } ] }
+    C;
+
+    @UI: {  lineItem:       [ { position: 80, label: 'D', cssDefault.width: '300px' } ],
+            identification: [ { position: 80, label: 'D' } ] }
+    D;
+
+    @UI: {  lineItem:       [ { position: 90, label: 'E', cssDefault.width: '300px' } ],
+            identification: [ { position: 90, label: 'E' } ] }
+    E;
+
+    @UI: {  lineItem:       [ { position: 100, label: 'F', cssDefault.width: '300px' } ],
+            identification: [ { position: 100, label: 'F' } ] }
+    F;
+
+    @UI: {  lineItem:       [ { position: 110, label: 'G', cssDefault.width: '300px' } ],
+            identification: [ { position: 110, label: 'G' } ] }
+    G;
+
+    @UI: {  lineItem:       [ { position: 120, label: 'H', cssDefault.width: '300px' } ],
+            identification: [ { position: 120, label: 'H' } ] }
+    H;
+
+    @UI: {  lineItem:       [ { position: 130, label: 'I', cssDefault.width: '300px' } ],
+            identification: [ { position: 130, label: 'I' } ] }
+    I;
+
+    @UI: {  lineItem:       [ { position: 140, label: 'J', cssDefault.width: '300px' } ],
+            identification: [ { position: 140, label: 'J' } ] }
+    J;
+
+    @UI: {  lineItem:       [ { position: 150, label: 'K', cssDefault.width: '300px' } ],
+            identification: [ { position: 150, label: 'K' } ] }
+    K;
+
+    @UI: {  lineItem:       [ { position: 160, label: 'L', cssDefault.width: '300px' } ],
+            identification: [ { position: 160, label: 'L' } ] }
+    L;
+
+    @UI: {  lineItem:       [ { position: 170, label: 'Back Size ID', cssDefault.width: '300px' } ],
+            identification: [ { position: 170, label: 'Back Size ID' } ] }
+    BackSizeID;
+
+    @UI.hidden: true
+    CreatedBy;
+
+    @UI.hidden: true
+    CreatedAt;
+
+    @UI.hidden: true
+    LastChangedBy;
+
+    @UI.hidden: true
+    LastChangedAt;
+
+    @UI.hidden: true
+    LocalLastChangedAt;
+
+    /* Associations */
+    @UI.hidden: true
+    _Product;    
+}

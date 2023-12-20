@@ -1,0 +1,7 @@
+@EndUserText.label: 'ZSD_PRODUCT_001'
+define service ZSD_PRODUCT_001 {
+  expose ZC_PRODUCT_001;
+  expose ZC_SIZEHEAD_001;
+  expose ZC_SIZE_001;
+  expose ZC_ITEM_001;
+}

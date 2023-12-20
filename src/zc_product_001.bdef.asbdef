@@ -1,0 +1,49 @@
+projection;
+strict ( 2 );
+use draft;
+use side effects;
+
+define behavior for ZC_PRODUCT_001 alias Product
+{
+  use create;
+  use update;
+  use delete;
+
+  use action Resume;
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Prepare;
+
+  use action update_items;
+  use action create_products;
+
+  use association _SizeHead { /*create;*/ with draft; }
+  use association _Size { /*create;*/ with draft; }
+  use association _Item { /*create;*/ with draft; }
+
+}
+
+define behavior for ZC_SIZEHEAD_001 alias SizeHead
+{
+  use update;
+//  use delete;
+
+  use association _Product { with draft; }
+}
+
+define behavior for ZC_SIZE_001 alias Size
+{
+  use update;
+//  use delete;
+
+  use association _Product { with draft; }
+}
+
+define behavior for ZC_ITEM_001 alias Item
+{
+  use update;
+//  use delete;
+
+  use association _Product { with draft; }
+}

@@ -1,0 +1,502 @@
+@Metadata.layer: #CORE
+@UI: {
+    headerInfo: { typeName: 'Cupsize / Backsize',
+                  typeNamePlural: 'Sizes',
+                  title: { type: #STANDARD, label: 'Cupsize', value: 'Back' } },
+    presentationVariant: [{ sortOrder: [{ by: 'Back', direction: #ASC }] }] }
+
+annotate entity ZC_SIZE_001 with 
+{
+
+    @UI.facet: [ { id:          'Size',
+                   purpose:     #STANDARD,
+                   type:        #IDENTIFICATION_REFERENCE,
+                   label:       'Size',
+                   position:    10 }]
+
+    @UI: {  lineItem:       [ { position: 10, label: 'Size UUID', cssDefault.width: '300px' } ],
+            identification: [ { position: 10, label: 'Size UUID' } ] }
+    @UI.hidden: true
+    SizeUUID;
+
+    @UI: {  lineItem:       [ { position: 20, label: 'Product UUID', cssDefault.width: '300px' } ],
+            identification: [ { position: 20, label: 'Product UUID' } ] }
+    @UI.hidden: true
+    ProductUUID;
+    
+    @UI: {  lineItem:       [ { position: 30, label: 'Size ID', cssDefault.width: '300px' } ],
+            identification: [ { position: 30, label: 'Size ID' } ] }
+    @UI.hidden: true
+    SizeID;
+
+    @UI: {  lineItem:       [ { position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant00', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant01', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant02', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant03', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant04', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant05', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant06', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant07', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant08', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant09', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant10', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant11', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant12', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant13', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant14', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant15', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant16', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant17', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant18', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant19', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant20', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant21', position: 10, label: 'Cup / Size', cssDefault.width: '250px' },
+                              { qualifier: 'SizeVariant22', position: 10, label: 'Cup / Size', cssDefault.width: '250px' } ],
+            identification: [ { position: 10, label: '' } ] }
+    Back;
+
+    @UI: {  lineItem:       [ { position: 140, label: 'A', cssDefault.width: '50px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON } ] } 
+    @EndUserText.label: 'A'
+    @UI.hidden: true
+    A;
+
+    @UI: {  lineItem:       [ { position: 150, label: 'B', cssDefault.width: '50px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON } ] } 
+    @EndUserText.label: 'B'
+    @UI.hidden: true
+    B;
+
+    @UI: {  lineItem:       [ { position: 160, label: 'C', cssDefault.width: '50px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON } ] } 
+    @EndUserText.label: 'C'
+    @UI.hidden: true
+    C;
+
+    @UI: {  lineItem:       [ { position: 170, label: 'D', cssDefault.width: '50px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON } ] } 
+    @EndUserText.label: 'D'
+    @UI.hidden: true
+    D;
+
+    @UI: {  lineItem:       [ { position: 180, label: 'E', cssDefault.width: '50px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON } ] } 
+    @EndUserText.label: 'E'
+    @UI.hidden: true
+    E;
+
+    @UI: {  lineItem:       [ { position: 190, label: 'F', cssDefault.width: '50px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON } ] } 
+    @EndUserText.label: 'F'
+    @UI.hidden: true
+    F;
+
+    @UI: {  lineItem:       [ { position: 200, label: 'G', cssDefault.width: '50px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON } ] } 
+    @EndUserText.label: 'G'
+    @UI.hidden: true
+    G;
+
+    @UI: {  lineItem:       [ { position: 210, label: 'H', cssDefault.width: '50px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON } ] } 
+    @EndUserText.label: 'H'
+    @UI.hidden: true
+    H;
+
+    @UI: {  lineItem:       [ { position: 220, label: 'I', cssDefault.width: '50px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON } ] } 
+    @EndUserText.label: 'I'
+    @UI.hidden: true
+    I;
+
+    @UI: {  lineItem:       [ { position: 230, label: 'J', cssDefault.width: '50px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON } ] } 
+    @EndUserText.label: 'J'
+    @UI.hidden: true
+    J;
+
+    @UI: {  lineItem:       [ { position: 240, label: 'K', cssDefault.width: '50px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON } ] } 
+    @EndUserText.label: 'K'
+    @UI.hidden: true
+    K;
+
+    @UI: {  lineItem:       [ { position: 250, label: 'L', cssDefault.width: '50px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON } ] } 
+    @EndUserText.label: 'L'
+    @UI.hidden: true
+    L;
+
+    @UI: {  lineItem:       [ { position: 20, label: 'A', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant00', position: 20, label: ' ', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant01', position: 20, label: '36', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant02', position: 20, label: '3/2XS', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant03', position: 20, label: '6', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant04', position: 20, label: '34', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant05', position: 20, label: 'XS', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant06', position: 20, label: 'XS', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant07', position: 20, label: 'XS', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant08', position: 20, label: 'XS', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant09', position: 20, label: '75', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant10', position: 20, label: '28', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant11', position: 20, label: '28', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant12', position: 20, label: '60', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant13', position: 20, label: '36', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant14', position: 20, label: '4', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant15', position: 20, label: '6', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant16', position: 20, label: '34', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant17', position: 20, label: '80', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant18', position: 20, label: '3/2XS', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant19', position: 20, label: '24', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant20', position: 20, label: '60', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant21', position: 20, label: '001', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant22', position: 20, label: ' ', cssDefault.width: '100px', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON } ],
+            identification: [ { position: 20, label: 'A', criticality:'Criticality01', criticalityRepresentation: #WITHOUT_ICON } ] }
+    A02;
+
+    @UI: {  lineItem:       [ { position: 30, label: 'B', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant00', position: 30, label: ' ', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant01', position: 30, label: '38', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant02', position: 30, label: '4/XS', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant03', position: 30, label: '8', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant04', position: 30, label: '36', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant05', position: 30, label: 'S', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant06', position: 30, label: 'S', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant07', position: 30, label: 'S', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant08', position: 30, label: 'S', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant09', position: 30, label: '80', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant10', position: 30, label: '30', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant11', position: 30, label: '30', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant12', position: 30, label: '65', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant13', position: 30, label: '38', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant14', position: 30, label: '6', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant15', position: 30, label: '8', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant16', position: 30, label: '36', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant17', position: 30, label: '85', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant18', position: 30, label: '4/XS', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant19', position: 30, label: '26', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant20', position: 30, label: '65', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant21', position: 30, label: ' ', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant22', position: 30, label: ' ', cssDefault.width: '100px', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON } ],
+            identification: [ { position: 30, label: 'B', criticality:'Criticality02', criticalityRepresentation: #WITHOUT_ICON } ] }
+    B02;
+
+    @UI: {  lineItem:       [ { position: 40, label: 'C', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant00', position: 40, label: ' ', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant01', position: 40, label: '40', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant02', position: 40, label: '5/S', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant03', position: 40, label: '10', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant04', position: 40, label: '38', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant05', position: 40, label: 'M', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant06', position: 40, label: 'M', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant07', position: 40, label: 'M', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant08', position: 40, label: 'M', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant09', position: 40, label: '85', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant10', position: 40, label: '32', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant11', position: 40, label: '32', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant12', position: 40, label: '70', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant13', position: 40, label: '40', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant14', position: 40, label: '8', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant15', position: 40, label: '10', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant16', position: 40, label: '38', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant17', position: 40, label: '90', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant18', position: 40, label: '5/S', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant19', position: 40, label: '28', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant20', position: 40, label: '70', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant21', position: 40, label: ' ', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant22', position: 40, label: ' ', cssDefault.width: '100px', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON } ],
+            identification: [ { position: 40, label: 'C', criticality:'Criticality03', criticalityRepresentation: #WITHOUT_ICON } ] }
+    C02;
+
+    @UI: {  lineItem:       [ { position: 50, label: 'D', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant00', position: 50, label: ' ', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant01', position: 50, label: '42', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant02', position: 50, label: '6/M', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant03', position: 50, label: '12', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant04', position: 50, label: '40', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant05', position: 50, label: 'L', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant06', position: 50, label: 'L', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant07', position: 50, label: 'L', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant08', position: 50, label: 'L', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant09', position: 50, label: '90', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant10', position: 50, label: '34', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant11', position: 50, label: '34', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant12', position: 50, label: '75', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant13', position: 50, label: '42', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant14', position: 50, label: '10', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant15', position: 50, label: '12', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant16', position: 50, label: '40', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant17', position: 50, label: '95', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant18', position: 50, label: '6/M', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant19', position: 50, label: '30', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant20', position: 50, label: '75', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant21', position: 50, label: ' ', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant22', position: 50, label: ' ', cssDefault.width: '100px', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON } ],
+            identification: [ { position: 50, label: 'D', criticality:'Criticality04', criticalityRepresentation: #WITHOUT_ICON } ] }
+    D02;
+
+    @UI: {  lineItem:       [ { position: 60, label: 'E', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant00', position: 60, label: ' ', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant01', position: 60, label: '44', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant02', position: 60, label: '7/L', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant03', position: 60, label: '14', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant04', position: 60, label: '42', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant05', position: 60, label: 'XL', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant06', position: 60, label: 'XL', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant07', position: 60, label: 'XL', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant08', position: 60, label: 'XL', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant09', position: 60, label: '95', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant10', position: 60, label: '36', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant11', position: 60, label: '36', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant12', position: 60, label: '80', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant13', position: 60, label: '44', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant14', position: 60, label: '12', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant15', position: 60, label: '14', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant16', position: 60, label: '42', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant17', position: 60, label: '100', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant18', position: 60, label: '7/L', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant19', position: 60, label: '32', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant20', position: 60, label: '80', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant21', position: 60, label: ' ', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant22', position: 60, label: ' ', cssDefault.width: '100px', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON } ],
+            identification: [ { position: 60, label: 'E', criticality:'Criticality05', criticalityRepresentation: #WITHOUT_ICON } ] }
+    E02;
+
+    @UI: {  lineItem:       [ { position: 70, label: 'F', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant00', position: 70, label: ' ', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant01', position: 70, label: '46', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant02', position: 70, label: '8/XL', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant03', position: 70, label: '16', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant04', position: 70, label: '44', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant05', position: 70, label: 'XXL', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant06', position: 70, label: 'XXL', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant07', position: 70, label: 'XXL', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant08', position: 70, label: 'XXL', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant09', position: 70, label: '100', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant10', position: 70, label: '38', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant11', position: 70, label: '38', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant12', position: 70, label: '85', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant13', position: 70, label: '46', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant14', position: 70, label: '14', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant15', position: 70, label: '16', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant16', position: 70, label: '44', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant17', position: 70, label: '105', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant18', position: 70, label: '8/XL', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant19', position: 70, label: '34', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant20', position: 70, label: '85', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant21', position: 70, label: ' ', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant22', position: 70, label: ' ', cssDefault.width: '100px', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON } ],
+            identification: [ { position: 70, label: 'F', criticality:'Criticality06', criticalityRepresentation: #WITHOUT_ICON } ] }
+    F02;
+
+    @UI: {  lineItem:       [ { position: 80, label: 'G', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant00', position: 80, label: ' ', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant01', position: 80, label: '48', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant02', position: 80, label: '9/2XL', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant03', position: 80, label: '18', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant04', position: 80, label: '46', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant05', position: 80, label: ' ', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant06', position: 80, label: ' ', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant07', position: 80, label: ' ', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant08', position: 80, label: ' ', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant09', position: 80, label: '105', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant10', position: 80, label: '40', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant11', position: 80, label: '40', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant12', position: 80, label: '90', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant13', position: 80, label: '48', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant14', position: 80, label: '16', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant15', position: 80, label: '18', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant16', position: 80, label: '46', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant17', position: 80, label: '110', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant18', position: 80, label: '9/2XL', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant19', position: 80, label: '36', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant20', position: 80, label: '90', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant21', position: 80, label: ' ', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant22', position: 80, label: ' ', cssDefault.width: '100px', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON } ],
+            identification: [ { position: 80, label: 'G', criticality:'Criticality07', criticalityRepresentation: #WITHOUT_ICON } ] }
+    G02;
+
+    @UI: {  lineItem:       [ { position: 90, label: 'H', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant00', position: 90, label: ' ', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant01', position: 90, label: '50', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant02', position: 90, label: '10/3XL', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant03', position: 90, label: '20', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant04', position: 90, label: '48', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant05', position: 90, label: ' ', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant06', position: 90, label: ' ', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant07', position: 90, label: ' ', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant08', position: 90, label: ' ', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant09', position: 90, label: '110', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant10', position: 90, label: '42', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant11', position: 90, label: '42', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant12', position: 90, label: '95', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant13', position: 90, label: '50', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant14', position: 90, label: '18', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant15', position: 90, label: '20', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant16', position: 90, label: '48', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant17', position: 90, label: '115', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant18', position: 90, label: '10/3XL', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant19', position: 90, label: '38', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant20', position: 90, label: '95', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant21', position: 90, label: ' ', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant22', position: 90, label: ' ', cssDefault.width: '100px', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON } ],
+            identification: [ { position: 90, label: 'H', criticality:'Criticality08', criticalityRepresentation: #WITHOUT_ICON } ] }
+    H02;
+
+    @UI: {  lineItem:       [ { position: 100, label: 'I', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant00', position: 100, label: ' ', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant01', position: 100, label: '52', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant02', position: 100, label: '11/4XL', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant03', position: 100, label: '22', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant04', position: 100, label: '50', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant05', position: 100, label: ' ', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant06', position: 100, label: ' ', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant07', position: 100, label: ' ', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant08', position: 100, label: ' ', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant09', position: 100, label: '115', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant10', position: 100, label: '44', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant11', position: 100, label: '44', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant12', position: 100, label: '100', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant13', position: 100, label: '52', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant14', position: 100, label: '20', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant15', position: 100, label: '22', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant16', position: 100, label: '50', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant17', position: 100, label: '120', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant18', position: 100, label: '11/4XL', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant19', position: 100, label: '40', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant20', position: 100, label: '100', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant21', position: 100, label: ' ', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant22', position: 100, label: ' ', cssDefault.width: '100px', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON } ],
+            identification: [ { position: 100, label: 'I', criticality:'Criticality09', criticalityRepresentation: #WITHOUT_ICON } ] }
+    I02;
+
+    @UI: {  lineItem:       [ { position: 110, label: 'J', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant00', position: 110, label: ' ', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant01', position: 110, label: '54', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant02', position: 110, label: '12/5XL', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant03', position: 110, label: '24', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant04', position: 110, label: '52', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant05', position: 110, label: ' ', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant06', position: 110, label: ' ', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant07', position: 110, label: ' ', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant08', position: 110, label: ' ', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant09', position: 110, label: '120', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant10', position: 110, label: '46', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant11', position: 110, label: '46', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant12', position: 110, label: '105', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant13', position: 110, label: '54', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant14', position: 110, label: '22', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant15', position: 110, label: '24', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant16', position: 110, label: '52', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant17', position: 110, label: '125', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant18', position: 110, label: '12/5XL', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant19', position: 110, label: '42', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant20', position: 110, label: '105', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant21', position: 110, label: ' ', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant22', position: 110, label: ' ', cssDefault.width: '100px', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON } ],
+            identification: [ { position: 110, label: 'J', criticality:'Criticality10', criticalityRepresentation: #WITHOUT_ICON } ] }
+    J02;
+
+    @UI: {  lineItem:       [ { position: 120, label: 'K', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant00', position: 120, label: ' ', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant01', position: 120, label: '56', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant02', position: 120, label: '13/6XL', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant03', position: 120, label: '26', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant04', position: 120, label: '54', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant05', position: 120, label: ' ', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant06', position: 120, label: ' ', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant07', position: 120, label: ' ', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant08', position: 120, label: ' ', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant09', position: 120, label: '125', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant10', position: 120, label: '48', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant11', position: 120, label: '48', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant12', position: 120, label: '110', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant13', position: 120, label: '56', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant14', position: 120, label: '24', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant15', position: 120, label: '26', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant16', position: 120, label: '54', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant17', position: 120, label: '130', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant18', position: 120, label: '13/6XL', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant19', position: 120, label: '44', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant20', position: 120, label: '110', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant21', position: 120, label: ' ', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant22', position: 120, label: ' ', cssDefault.width: '100px', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON } ],
+            identification: [ { position: 120, label: 'K', criticality:'Criticality11', criticalityRepresentation: #WITHOUT_ICON } ] }
+    K02;
+
+    @UI: {  lineItem:       [ { position: 130, label: 'L', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant00', position: 130, label: ' ', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant01', position: 130, label: '58', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant02', position: 130, label: '14/7XL', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant03', position: 130, label: '28', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant04', position: 130, label: '56', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant05', position: 130, label: ' ', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant06', position: 130, label: ' ', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant07', position: 130, label: ' ', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant08', position: 130, label: ' ', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant09', position: 130, label: '130', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant10', position: 130, label: '50', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant11', position: 130, label: '50', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant12', position: 130, label: '115', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant13', position: 130, label: '58', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant14', position: 130, label: '26', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant15', position: 130, label: '28', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant16', position: 130, label: '56', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant17', position: 130, label: '135', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant18', position: 130, label: '14/7XL', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant19', position: 130, label: '46', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant20', position: 130, label: '115', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant21', position: 130, label: ' ', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON },
+                              { qualifier: 'SizeVariant22', position: 130, label: ' ', cssDefault.width: '100px', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON } ],
+            identification: [ { position: 130, label: 'L', criticality:'Criticality12', criticalityRepresentation: #WITHOUT_ICON } ] }
+    L02;
+
+    @UI.hidden: true
+    Criticality01;
+
+    @UI.hidden: true
+    Criticality02;
+
+    @UI.hidden: true
+    Criticality03;
+
+    @UI.hidden: true
+    Criticality04;
+
+    @UI.hidden: true
+    Criticality05;
+
+    @UI.hidden: true
+    Criticality06;
+
+    @UI.hidden: true
+    Criticality07;
+
+    @UI.hidden: true
+    Criticality08;
+
+    @UI.hidden: true
+    Criticality09;
+
+    @UI.hidden: true
+    Criticality10;
+
+    @UI.hidden: true
+    Criticality11;
+
+    @UI.hidden: true
+    Criticality12;
+
+    @UI: {  lineItem:       [ { position: 270, label: 'Back Size ID', cssDefault.width: '100px' } ],
+            identification: [ { position: 270, label: 'Back Size ID' } ] }
+    @UI.hidden: true
+    BackSizeID;
+
+    @UI.hidden: true
+    CreatedBy;
+
+    @UI.hidden: true
+    CreatedAt;
+
+    @UI.hidden: true
+    LastChangedBy;
+
+    @UI.hidden: true
+    LastChangedAt;
+
+    @UI.hidden: true
+    LocalLastChangedAt;
+
+    /* Associations */
+    @UI.hidden: true
+    _Product;    
+}

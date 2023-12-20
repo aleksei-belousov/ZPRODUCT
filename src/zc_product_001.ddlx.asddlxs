@@ -1,0 +1,380 @@
+@Metadata.layer: #CORE
+@UI: {
+    headerInfo: { typeName: 'Product',
+                  typeNamePlural: 'Products',
+                  title: { type: #STANDARD, label: 'Product', value: 'ProductID' } },
+    presentationVariant: [{ sortOrder: [{ by: 'ProductID', direction: #ASC }] }] }
+@Search.searchable: true
+
+annotate entity ZC_PRODUCT_001  with 
+{
+    // Product Generation
+    @UI.facet: [{ id:       'Product',
+                  purpose:  #STANDARD,
+                  type:     #IDENTIFICATION_REFERENCE,
+                  label:    'Product',
+                  position: 10 },
+
+                // Size Head - hidden
+                { hidden:       true,
+                  label:        'SizeHead',
+                  id:           'SizeHeadID',
+                  purpose:      #STANDARD,
+                  type:         #LINEITEM_REFERENCE,
+                  position:     20,
+                  targetElement: '_SizeHead' },
+
+                // Static View for Size table (test) - hidden
+                { hidden:       true,
+                  label:        'Size',
+                  id:           'SizeID',
+                  purpose:      #STANDARD,
+                  type:         #LINEITEM_REFERENCE,
+                  position:     30,
+                  targetElement: '_Size' },
+
+                // Dynamic Views for Size table - managed:
+                { targetQualifier: 'SizeVariant00',
+                  hidden: #(Hidden00),
+                  label:         'Size',
+                  id:            'Size00',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant01',
+                  hidden: #(Hidden01),
+                  label:         'Size',
+                  id:            'Size01',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant02',
+                  hidden: #(Hidden02),
+                  label:         'Size',
+                  id:            'Size02',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant03',
+                  hidden: #(Hidden03),
+                  label:         'Size',
+                  id:            'Size03',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant04',
+                  hidden: #(Hidden04),
+                  label:         'Size',
+                  id:            'Size04',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant05',
+                  hidden: #(Hidden05),
+                  label:         'Size',
+                  id:            'Size05',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant06',
+                  hidden: #(Hidden06),
+                  label:         'Size',
+                  id:            'Size06',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant07',
+                  hidden: #(Hidden07),
+                  label:         'Size',
+                  id:            'Size07',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant08',
+                  hidden: #(Hidden08),
+                  label:         'Size',
+                  id:            'Size08',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant09',
+                  hidden: #(Hidden09),
+                  label:         'Size',
+                  id:            'Size09',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant10',
+                  hidden: #(Hidden10),
+                  label:         'Size',
+                  id:            'Size10',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant11',
+                  hidden: #(Hidden11),
+                  label:         'Size',
+                  id:            'Size11',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant12',
+                  hidden: #(Hidden12),
+                  label:         'Size',
+                  id:            'Size12',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant13',
+                  hidden: #(Hidden13),
+                  label:         'Size',
+                  id:            'Size13',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant14',
+                  hidden: #(Hidden14),
+                  label:         'Size',
+                  id:            'Size14',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant15',
+                  hidden: #(Hidden15),
+                  label:         'Size',
+                  id:            'Size15',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant16',
+                  hidden: #(Hidden16),
+                  label:         'Size',
+                  id:            'Size16',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant17',
+                  hidden: #(Hidden17),
+                  label:         'Size',
+                  id:            'Size17',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant18',
+                  hidden: #(Hidden18),
+                  label:         'Size',
+                  id:            'Size18',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant19',
+                  hidden: #(Hidden19),
+                  label:         'Size',
+                  id:            'Size19',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant20',
+                  hidden: #(Hidden20),
+                  label:         'Size',
+                  id:            'Size20',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant21',
+                  hidden: #(Hidden21),
+                  label:         'Size',
+                  id:            'Size21',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+                { targetQualifier: 'SizeVariant22',
+                  hidden: #(Hidden22),
+                  label:         'Size',
+                  id:            'Size22',
+                  purpose:       #STANDARD,
+                  type:          #LINEITEM_REFERENCE,
+                  position:      40,
+                  targetElement: '_Size' },
+
+                // Item
+                { hidden:       false,
+                  label:        'Item',
+                  id:           'ItemID',
+                  purpose:      #STANDARD,
+                  type:         #LINEITEM_REFERENCE,
+                  position:     60,
+                  targetElement: '_Item' }]
+
+    @UI: { lineItem:          [ { position: 10, label: 'Product UUID' } ],
+           identification:    [ { position: 10, label: 'Product UUID' } ]
+       }
+    @UI.hidden: true
+    ProductUUID;
+
+    @UI: { lineItem:          [ { position: 20, label: 'Product ID' } ],
+           identification:    [ { position: 20, label: 'Product ID' },
+                                { type: #FOR_ACTION, dataAction: 'update_items',    label: 'Update Items',      position: 1 },
+                                { type: #FOR_ACTION, dataAction: 'create_products', label: 'Create Products',   position: 2 } ]
+    }
+    @Search.defaultSearchElement: true
+    @UI.hidden: true
+    ProductID;
+
+    @UI: { lineItem:          [ { position: 30, label: 'Product Type' } ],
+           identification:    [ { position: 30, label: 'Product Type' } ]
+    }
+    @Search.defaultSearchElement: true
+    @UI.hidden: true
+    ProductType;
+
+
+    @UI: { lineItem:          [ { position: 40, label: 'Model' } ],
+           identification:    [ { position: 40, label: 'Model' } ]
+    }
+    @Search.defaultSearchElement: true
+    Model;
+    
+    @UI: { lineItem:          [ { position: 50, label: 'Color' } ],
+           identification:    [ { position: 50, label: 'Color' } ]
+    }
+    @Search.defaultSearchElement: true
+    Color;
+    
+    @UI: { lineItem:          [ { position: 60, label: 'Matrix Type' } ],
+           identification:    [ { position: 60, label: 'Matrix Type' } ]
+    }
+    @Search.defaultSearchElement: true
+    MatrixTypeID;
+    
+    @UI: { lineItem:          [ { position: 70, label: 'Country' } ],
+           identification:    [ { position: 70, label: 'Country' } ]
+    }
+    @Search.defaultSearchElement: true
+    Country;
+
+    @UI: { lineItem:          [ { position: 80, label: 'Description' } ],
+           identification:    [ { position: 80, label: 'Description' } ]
+    }
+    @Search.defaultSearchElement: true
+    @UI.hidden: true
+    Description;
+
+    @UI: { lineItem:          [ { position: 90, label: 'Source Product', type: #WITH_URL, url: 'SourceProductURL' } ],
+           identification:    [ { position: 90, label: 'Source Product', type: #WITH_URL, url: 'SourceProductURL' } ]
+    }
+    @Search.defaultSearchElement: true
+    SourceProduct;
+
+    @UI.hidden: true
+    SourceProductURL;
+
+    @UI.hidden: true
+    Hidden00;
+
+    @UI.hidden: true
+    Hidden01;
+
+    @UI.hidden: true
+    Hidden02;
+
+    @UI.hidden: true
+    Hidden03;
+
+    @UI.hidden: true
+    Hidden04;
+
+    @UI.hidden: true
+    Hidden05;
+
+    @UI.hidden: true
+    Hidden06;
+
+    @UI.hidden: true
+    Hidden07;
+
+    @UI.hidden: true
+    Hidden08;
+
+    @UI.hidden: true
+    Hidden09;
+
+    @UI.hidden: true
+    Hidden10;
+
+    @UI.hidden: true
+    Hidden11;
+
+    @UI.hidden: true
+    Hidden12;
+
+    @UI.hidden: true
+    Hidden13;
+
+    @UI.hidden: true
+    Hidden14;
+
+    @UI.hidden: true
+    Hidden15;
+
+    @UI.hidden: true
+    Hidden16;
+
+    @UI.hidden: true
+    Hidden17;
+
+    @UI.hidden: true
+    Hidden18;
+
+    @UI.hidden: true
+    Hidden19;
+
+    @UI.hidden: true
+    Hidden20;
+
+    @UI.hidden: true
+    Hidden21;
+
+    @UI.hidden: true
+    Hidden22;
+
+    @UI.hidden: true
+    CreatedBy;
+
+    @UI.hidden: true
+    CreatedAt;
+
+    @UI.hidden: true
+    Copying;
+
+    @UI.hidden: true
+    LastChangedBy;
+
+    @UI.hidden: true
+    LastChangedAt;
+
+    @UI.hidden: true
+    LocalLastChangedAt;    
+}

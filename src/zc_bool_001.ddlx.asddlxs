@@ -1,0 +1,31 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: { typeName: 'Bool',
+                typeNamePlural: 'Bool',
+                title: { type: #STANDARD, label: 'Bool', value: 'ID' } },
+  presentationVariant: [{ sortOrder: [{ by: 'ID', direction: #ASC }] }] }
+
+annotate entity ZC_BOOL_001 with 
+{
+    @UI.facet: [ { id:          'Bool',
+                   purpose:     #STANDARD,
+                   type:        #IDENTIFICATION_REFERENCE,
+                   label:       'Bool',
+                   position:    10 }]
+
+    @UI: {  lineItem:       [ { position: 10, label: 'UUID', cssDefault.width: '300px' } ],
+            identification: [ { position: 10, label: 'UUID', cssDefault.width: '300px' } ] }
+    @UI.hidden: true
+    UUID;
+
+    @UI: {  lineItem:       [ { position: 20, label: 'ID', cssDefault.width: '300px' } ],
+            identification: [ { position: 20, label: 'ID', cssDefault.width: '300px' } ],
+            selectionField: [ { position: 20 } ] }
+    ID;
+
+    @UI: {  lineItem:       [ { position: 30, label: 'Text', cssDefault.width: '300px' } ],
+            identification: [ { position: 30, label: 'Text', cssDefault.width: '300px' } ],
+            selectionField: [ { position: 30 } ] }
+    Text;
+        
+}

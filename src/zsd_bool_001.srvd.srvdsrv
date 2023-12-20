@@ -1,0 +1,4 @@
+@EndUserText.label: 'ZSD_BOOL_001'
+define service ZSD_BOOL_001 {
+  expose ZC_BOOL_001;
+}
