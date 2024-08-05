@@ -131,43 +131,34 @@ CLASS lhc_size IMPLEMENTATION.
 ENDCLASS. " lhc_size IMPLEMENTATION
 
 CLASS lhc_Product DEFINITION INHERITING FROM cl_abap_behavior_handler.
+
   PRIVATE SECTION.
 
-    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
-      IMPORTING keys REQUEST requested_authorizations FOR Product RESULT result.
+    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION IMPORTING keys REQUEST requested_authorizations FOR Product RESULT result.
 
-    METHODS get_instance_features FOR INSTANCE FEATURES
-      IMPORTING keys REQUEST requested_features FOR product RESULT result.
+    METHODS get_instance_features FOR INSTANCE FEATURES IMPORTING keys REQUEST requested_features FOR product RESULT result.
 
-    METHODS activate FOR MODIFY
-      IMPORTING keys FOR ACTION product~activate.
+    METHODS activate FOR MODIFY IMPORTING keys FOR ACTION product~activate.
 
-    METHODS edit FOR MODIFY
-      IMPORTING keys FOR ACTION product~edit.
+    METHODS edit FOR MODIFY IMPORTING keys FOR ACTION product~edit.
 
-    METHODS resume FOR MODIFY
-      IMPORTING keys FOR ACTION product~resume.
+    METHODS resume FOR MODIFY IMPORTING keys FOR ACTION product~resume.
 
-    METHODS create_products FOR MODIFY
-      IMPORTING keys FOR ACTION product~create_products.
+    METHODS create_products FOR MODIFY IMPORTING keys FOR ACTION product~create_products.
 
-*    METHODS check_products FOR MODIFY
-*      IMPORTING keys FOR ACTION product~check_products.
+*    METHODS check_products FOR MODIFY IMPORTING keys FOR ACTION product~check_products.
 
-    METHODS on_create FOR DETERMINE ON MODIFY
-      IMPORTING keys FOR product~on_create.
+    METHODS on_create FOR DETERMINE ON MODIFY IMPORTING keys FOR product~on_create.
 
-    METHODS on_model_modify FOR DETERMINE ON MODIFY " on modify model
-      IMPORTING keys FOR product~on_model_modify.
+    METHODS on_model_modify FOR DETERMINE ON MODIFY IMPORTING keys FOR product~on_model_modify. " on modify model
 
-    METHODS on_scheme_save FOR DETERMINE ON SAVE "on save model, color, matrix type, country
-      IMPORTING keys FOR product~on_scheme_save.
+    METHODS on_scheme_save FOR DETERMINE ON SAVE IMPORTING keys FOR product~on_scheme_save. "on save model, color, matrix type, country
 
-    METHODS on_scheme_modify FOR DETERMINE ON MODIFY
-      IMPORTING keys FOR product~on_scheme_modify.
+    METHODS on_scheme_modify FOR DETERMINE ON MODIFY IMPORTING keys FOR product~on_scheme_modify.
 
-    METHODS update_items FOR MODIFY
-      IMPORTING keys FOR ACTION product~update_items.
+    METHODS update_items FOR MODIFY IMPORTING keys FOR ACTION product~update_items.
+
+    METHODS create_products_via_api FOR MODIFY IMPORTING keys FOR ACTION product~create_products_via_api.
 
 *   Internal methods:
 
@@ -204,6 +195,13 @@ CLASS lhc_Product DEFINITION INHERITING FROM cl_abap_behavior_handler.
         VALUE(i_productuuid)        TYPE zi_product_001-ProductUUID
         VALUE(i_model)              TYPE zi_product_001-Model
         VALUE(i_color)              TYPE zi_product_001-Color.
+
+*   Check the Material via API (exists or does not)
+    METHODS check_product_via_api_internal
+      IMPORTING
+        VALUE(i_product)            TYPE string
+      RETURNING
+        VALUE(exists)               TYPE abap_boolean.
 
 ENDCLASS. " lhc_Product DEFINITION
 
@@ -355,6 +353,7 @@ CLASS lhc_Product IMPLEMENTATION.
     DATA it_productstorage_create       TYPE TABLE FOR CREATE I_ProductTP_2\_ProductStorage.
     DATA it_productunitofmeasure_create TYPE TABLE FOR CREATE I_ProductTP_2\_ProductUnitOfMeasure.
     DATA it_productvaluation_create     TYPE TABLE FOR CREATE I_ProductTP_2\_ProductValuation.
+    DATA it_productsalestax_update      TYPE TABLE FOR UPDATE I_ProductTP_2\\ProductSalesDeliverySalesTax.
 
 *   Product Plant
     DATA it_mrp_create                  TYPE TABLE FOR CREATE I_ProductTP_2\\ProductPlant\_ProductPlantMRP.
@@ -402,7 +401,7 @@ CLASS lhc_Product IMPLEMENTATION.
                 REPORTED DATA(ls_reported0).
 
 *           Read Source Product Nodes
-            LOOP AT lt_sourceproduct INTO DATA(ls_sourceproduct).
+            LOOP AT lt_sourceproduct INTO DATA(ls_sourceproduct). " a single row
 
                 READ ENTITIES OF I_ProductTP_2
 *                   Description
@@ -567,8 +566,8 @@ CLASS lhc_Product IMPLEMENTATION.
                     ProductUUID = <entity>-ProductUUID
                 ) )
                 RESULT DATA(lt_item)
-                FAILED DATA(ls_failed4)
-                REPORTED DATA(ls_reported4).
+                FAILED DATA(ls_failed5)
+                REPORTED DATA(ls_reported5).
 
             LOOP AT lt_item INTO DATA(ls_item) WHERE ( Status IS INITIAL ).
 
@@ -583,6 +582,7 @@ CLASS lhc_Product IMPLEMENTATION.
                 CLEAR it_productstorage_create[].
                 CLEAR it_productunitofmeasure_create[].
                 CLEAR it_productvaluation_create[].
+                CLEAR it_productsalestax_update[].
 
                 CLEAR it_mrp_create[].
                 CLEAR it_supplyplanning_create[].
@@ -768,6 +768,7 @@ CLASS lhc_Product IMPLEMENTATION.
                         ) )
                     )
                     TO it_productsalesdelivery_create[].
+
 *                   Product - Sales Delivery - Sales Tax
                     LOOP AT it_salestax INTO DATA(wa_salestax) WHERE ( ProductSalesOrg          = ls_sourceproductsalesdelivery-ProductSalesOrg ) AND
                                                                      ( ProductDistributionChnl  = ls_sourceproductsalesdelivery-ProductDistributionChnl ).
@@ -785,10 +786,12 @@ CLASS lhc_Product IMPLEMENTATION.
                             ) )
                         )
                         TO it_salestax_create[].
+
                     ENDLOOP.
+
                 ENDLOOP. " lt_sourceproductsalesdelivery
 
-*               Storage
+*               Product - Storage
                 LOOP AT lt_sourceproductstorage INTO DATA(ls_sourceproductstorage).
                     cid = 'storage' && CONV string( sy-tabix ).
                     CONDENSE cid.
@@ -804,7 +807,7 @@ CLASS lhc_Product IMPLEMENTATION.
                     TO it_productstorage_create[].
                 ENDLOOP. " lt_sourceproductstorage
 
-*               Unit Of Measure
+*               Product - Unit Of Measure
                 LOOP AT lt_sourceproductunitofmeasure INTO DATA(ls_sourceproductunitofmeasure).
                     cid = 'unitofmeasure' && CONV string( sy-tabix ).
                     CONDENSE cid.
@@ -820,7 +823,7 @@ CLASS lhc_Product IMPLEMENTATION.
                     TO it_productunitofmeasure_create[].
                 ENDLOOP. " lt_sourceproductunitofmeasure
 
-*               Valuation
+*               Product - Valuation
                 LOOP AT lt_sourceproductvaluation INTO DATA(ls_sourceproductvaluation).
                     cid = 'valuation' && CONV string( sy-tabix ).
                     CONDENSE cid.
@@ -1261,6 +1264,19 @@ CLASS lhc_Product IMPLEMENTATION.
                     MAPPED DATA(mapped5)
                     FAILED DATA(failed5)
                     REPORTED DATA(reported5).
+
+*                MODIFY ENTITIES OF I_ProductTP_2
+*                    ENTITY ProductSalesDeliverySalesTax
+*                    UPDATE FIELDS ( ProductTaxClassification )
+*                    WITH VALUE #( ( %key-Product = 'TEST_PRODUCT'
+*                                    %key-Country = 'DE'
+*                                    %key-ProductSalesTaxCategory = 'MWST'
+*                                    %key-ProductSalesOrg = '1010'
+*                                    %key-ProductDistributionChnl = '10'
+*                                    ProductTaxClassification = '1' ) )
+*                    WITH it_productsalestax_update
+*                    REPORTED DATA(reported6)
+*                    FAILED DATA(failed6).
 
 *               For using in SAVE_MODIFY to Refresh Items and Sizes Tables
                 zbp_i_product_001=>mapped_product_uuid = <entity>-ProductUUID.
@@ -2040,6 +2056,344 @@ CLASS lhc_Product IMPLEMENTATION.
 
   ENDMETHOD. " on_scheme_modify
 
+* Update Items
+  METHOD update_items.
+
+    " read transfered instances
+    READ ENTITIES OF zi_product_001 IN LOCAL MODE
+      ENTITY Product
+      ALL FIELDS
+      WITH CORRESPONDING #( keys )
+      RESULT DATA(entities).
+
+    LOOP AT entities ASSIGNING FIELD-SYMBOL(<entity>).
+
+        IF ( <entity>-%is_draft = '00' ). " Saved
+        ENDIF.
+
+        IF ( <entity>-%is_draft = '01' ). " Draft
+
+*           Disable Copy Color Mode
+            MODIFY ENTITIES OF zi_product_001 IN LOCAL MODE
+                ENTITY Product
+                UPDATE FIELDS ( Copying )
+                WITH VALUE #( (
+                    %is_draft           = <entity>-%is_draft
+                    %key                = <entity>-%key
+                    Copying             = abap_false
+                ) )
+                FAILED DATA(ls_failed)
+                MAPPED DATA(ls_mapped)
+                REPORTED DATA(ls_reported).
+
+*           Read Actual Matrix
+            SELECT SINGLE * FROM zproduct001  WHERE ( productuuid = @<entity>-ProductUUID ) INTO @DATA(wa_matrix).
+
+*           Read Matrix Draft
+            SELECT SINGLE * FROM zproduct001d WHERE ( productuuid = @<entity>-ProductUUID ) INTO @DATA(wa_matrix_draft).
+
+            IF ( <entity>-Copying = abap_true ). " Copy Color
+*               If model/color changed - do not generate items (change scheme instead)
+                IF ( ( <entity>-model <> wa_matrix-model ) ).
+*                    APPEND VALUE #( %key = <entity>-%key %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error text = 'Model changed - Save Data.' ) ) TO reported-matrix.
+*                    RETURN.
+                ENDIF.
+            ELSE. " Default Behavior
+*               If model/color changed - do not generate items (change scheme instead)
+                IF ( ( <entity>-model <> wa_matrix-model ) OR ( <entity>-color <> wa_matrix-color ) ).
+*                    APPEND VALUE #( %key = <entity>-%key %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error text = 'Model/Color changed - Save Data.' ) ) TO reported-matrix.
+*                    RETURN.
+                ENDIF.
+            ENDIF.
+
+        ENDIF.
+
+*       If model/color invalid - do not generate items
+*        IF ( ( <entity>-Model IS INITIAL ) OR ( <entity>-Color IS INITIAL ) ).
+*            APPEND VALUE #( %key = <entity>-%key %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error text = 'Model/Color invalid - Fix Data.' ) ) TO reported-matrix.
+*            RETURN.
+*        ENDIF.
+
+*       Convert Sizes To Items ((Re)Generate Items)
+        sizes_to_items_internal(
+            is_draft        = <entity>-%is_draft
+            i_productuuid   = <entity>-ProductUUID
+            i_model         = <entity>-Model
+            i_color         = <entity>-Color
+        ).
+
+    ENDLOOP.
+
+  ENDMETHOD. " update_items
+
+  METHOD create_products_via_api.
+
+*    SELECT * FROM i_product INTO TABLE @DATA(it_product).
+
+    TRY.
+
+*       DATA(i_url) = 'https://my404930-api.s4hana.cloud.sap:443/sap/opu/odata/sap/API_PRODUCT_SRV/A_Product'.
+
+        DATA i_url      TYPE string. " VALUE 'https://my404907-api.s4hana.cloud.sap/sap/opu/odata/sap//sap/opu/odata/sap/API_PRODUCT_SRV/A_Product'.
+        DATA i_username TYPE string. " VALUE 'INBOUND_USER'.
+        DATA i_password TYPE string. " VALUE 'rtrVDDgelabtTjUiybRX}tVD3JksqqfvPpBdJRaL'.
+
+        DATA(system_url) = cl_abap_context_info=>get_system_url( ).
+
+        IF ( system_url(8) = 'my404930' ). " dev dev
+            i_url       = 'https://my404930-api.s4hana.cloud.sap/sap/opu/odata/sap/API_PRODUCT_SRV/A_Product'.
+            i_username  = 'INBOUND_USER'.
+            i_password  = 'rtrVDDgelabtTjUiybRX}tVD3JksqqfvPpBdJRaL'.
+        ENDIF.
+        IF ( system_url(8) = 'my404898' ). " dev cust
+            i_url       = 'https://my404898-api.s4hana.cloud.sap/sap/opu/odata/sap/API_PRODUCT_SRV/A_Product'.
+            i_username  = 'INBOUND_USER'.
+            i_password  = 'rtrVDDgelabtTjUiybRX}tVD3JksqqfvPpBdJRaL'.
+        ENDIF.
+        IF ( system_url(8) = 'my404907' ). " test
+            i_url       = 'https://my404907-api.s4hana.cloud.sap/sap/opu/odata/sap/API_PRODUCT_SRV/A_Product'.
+            i_username  = 'INBOUND_USER'.
+            i_password  = 'rtrVDDgelabtTjUiybRX}tVD3JksqqfvPpBdJRaL'.
+        ENDIF.
+        IF ( system_url(8) = 'my410080' ). " prod
+            i_url       = 'https://my410080-api.s4hana.cloud.sap/sap/opu/odata/sap/API_PRODUCT_SRV/A_Product'.
+            i_username  = 'INBOUND_USER'.
+            i_password  = 'YKXMYdjNnGgqko&aEueVx5mHTFPRGcDGAVgQgnFh'.
+        ENDIF.
+
+*       Message
+        DATA severity   TYPE if_abap_behv_message=>t_severity VALUE if_abap_behv_message=>severity-error.
+        DATA msgno      LIKE if_abap_behv_message=>if_t100_message~t100key-msgno VALUE '001'.
+        DATA msgid      LIKE if_abap_behv_message=>if_t100_message~t100key-msgid VALUE 'Z_PRODUCT_001'.
+        DATA msgv1      LIKE if_abap_behv_message=>if_t100_message~t100key-attr1.
+        DATA msgv2      LIKE if_abap_behv_message=>if_t100_message~t100key-attr2.
+        DATA msgv3      LIKE if_abap_behv_message=>if_t100_message~t100key-attr3.
+        DATA msgv4      LIKE if_abap_behv_message=>if_t100_message~t100key-attr4.
+
+        " Read transfered instances
+        READ ENTITIES OF zi_product_001  IN LOCAL MODE
+            ENTITY Product
+            ALL FIELDS
+            WITH CORRESPONDING #( keys )
+            RESULT DATA(entities).
+
+        LOOP AT entities ASSIGNING FIELD-SYMBOL(<entity>).
+
+            IF ( <entity>-%is_draft = '00' ). " Saved
+
+                DATA(exists) = check_product_via_api_internal( CONV string( <entity>-SourceProduct ) ).
+                IF ( exists = abap_false ).
+                    APPEND VALUE #( %key = <entity>-%key %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error text = 'The Source Product not valid.' ) ) TO reported-product.
+                    RETURN.
+                ELSE.
+                    APPEND VALUE #( %key = <entity>-%key %msg = new_message_with_text( severity = if_abap_behv_message=>severity-success text = 'The Source Product is OK.' ) ) TO reported-product.
+*                    RETURN.
+                ENDIF.
+
+*               Get Source Product:
+
+*               https://my404898-api.s4hana.cloud.sap/sap/opu/odata/sap/API_PRODUCT_SRV/A_Product('1111111115')?$expand=to_Description&$format=json
+                CONCATENATE
+                        i_url
+                        '('''
+                        <entity>-SourceProduct
+                        ''')'                           " <- Warehouse Management (on Root level)
+                        '?$expand='
+                        'to_Description,'
+                        'to_Plant,'
+                        'to_Plant/to_PlantMRPArea,'
+                        'to_Plant/to_PlantQualityMgmt,'
+                        'to_Plant/to_PlantSales,'
+                        'to_Plant/to_PlantStorage,'
+                        'to_Plant/to_PlantText,'
+                        'to_Plant/to_ProdPlantInternationalTrade,'
+                        'to_Plant/to_ProductPlantCosting,'
+                        'to_Plant/to_ProductPlantForecast,'
+                        'to_Plant/to_ProductPlantProcurement,'
+                        'to_Plant/to_ProductSupplyPlanning,'
+                        'to_Plant/to_ProductWorkScheduling,'
+                        'to_Plant/to_StorageLocation,'
+                        'to_ProductBasicText,'
+                        'to_ProductInspectionText,'
+                        'to_ProductProcurement,'
+                        'to_ProductPurchaseText,'
+                        'to_ProductQualityMgmt,'
+                        'to_ProductSales,'
+                        'to_ProductSalesTax,'
+                        'to_ProductStorage,'            " <- Storage
+                        'to_ProductUnitsOfMeasure,'
+                        'to_SalesDelivery,'             " <- Distribution Chains
+                        'to_SalesDelivery/to_SalesTax,'
+                        'to_SalesDelivery/to_SalesText,'
+                        'to_Valuation'
+                        '&$format=json'
+                    INTO
+                        DATA(i_url1).
+
+                DATA(http_destination1) = cl_http_destination_provider=>create_by_url( i_url1 ).
+
+                DATA(lo_http_client1) = cl_web_http_client_manager=>create_by_http_destination( http_destination1 ).
+
+                lo_http_client1->get_http_request( )->set_authorization_basic(
+                    i_username = i_username
+                    i_password = i_password
+                ).
+
+                DATA(lo_http_request1) = lo_http_client1->get_http_request( ).
+
+                DATA(lo_http_response1) = lo_http_client1->execute(
+                    i_method   = if_web_http_client=>get
+                ).
+
+                DATA(text1)                   = lo_http_response1->get_text( ).
+                DATA(status1)                 = lo_http_response1->get_status( ).
+                DATA(response_header_fields1) = lo_http_response1->get_header_fields( ).
+
+*               RETURN.
+
+*               Get Token:
+
+                DATA(http_destination) = cl_http_destination_provider=>create_by_url( i_url ).
+
+                DATA(lo_http_client) = cl_web_http_client_manager=>create_by_http_destination( http_destination ).
+
+                lo_http_client->get_http_request( )->set_authorization_basic(
+                    i_username = i_username
+                    i_password = i_password
+                ).
+
+                DATA(lo_http_request) = lo_http_client->get_http_request( ).
+
+                lo_http_request->set_header_field(
+                    i_name  = 'x-csrf-token'
+                    i_value = 'fetch'
+                ).
+
+                DATA(lo_http_response) = lo_http_client->execute(
+                    i_method   = if_web_http_client=>get
+                ).
+
+                DATA(text)                   = lo_http_response->get_text( ).
+                DATA(status)                 = lo_http_response->get_status( ).
+                DATA(response_header_fields) = lo_http_response->get_header_fields( ).
+
+                READ TABLE response_header_fields WITH KEY name = 'x-csrf-token' INTO DATA(field).
+                IF ( sy-subrc = 0 ).
+                    DATA(token) = field-value.
+                ENDIF.
+
+*               Update Code:
+
+                READ ENTITIES OF zi_product_001 IN LOCAL MODE
+                    ENTITY Product BY \_Item
+                    ALL FIELDS WITH VALUE #( (
+                        ProductUUID = <entity>-ProductUUID
+                    ) )
+                    RESULT DATA(lt_item)
+                    FAILED DATA(failed1)
+                    REPORTED DATA(reported1).
+
+*               APPEND VALUE #( Product  = '1111111121' ) TO lt_item. " for testing
+                LOOP AT lt_item INTO DATA(item) WHERE ( Status IS INITIAL ).
+
+                    DATA i_fields TYPE if_web_http_request=>name_value_pairs.
+                    APPEND VALUE #(
+                        name  = 'x-csrf-token'
+                        value = token " '5iGZK1qT45Vi4UfHYazbPQ=='
+                    )
+                    TO i_fields.
+                    APPEND VALUE #(
+                        name  = 'Content-Type'
+                        value = 'application/json'
+                    )
+                    TO i_fields.
+
+                    lo_http_request->set_header_fields(
+                      EXPORTING
+                        i_fields = i_fields
+*                      RECEIVING
+*                        r_value  =
+                    ).
+
+                    DATA i_text TYPE string.
+*                    CONCATENATE
+*                            '{'
+*                            '   "Product":"1111111121",'
+*                            '   "ProductType":"HAWA",'
+*                            '   "BaseUnit":"EA",'
+*                            '   "to_Description":{'
+*                            '       "results":['
+*                            '           {'
+*                            '               "Product":"1111111121",'
+*                            '               "Language":"E",'
+*                            '               "ProductDescription":"TEST 8 Desciption"'
+*                            '           }'
+*                            '       ]'
+*                            '   }'
+*                            '}'
+*                        INTO
+*                            i_text.
+                    i_text = text1.
+                    CONCATENATE '"Product":"' <entity>-SourceProduct    '"' INTO DATA(sourceTag).
+                    CONCATENATE '"Product":"' item-Product              '"' INTO DATA(targetTag).
+
+*                    REPLACE ALL OCCURRENCES OF '"Product":"1111111115"' in i_text WITH '"Product":"1111111121"'.
+                    REPLACE ALL OCCURRENCES OF sourceTag in i_text WITH targetTag.
+
+                    lo_http_request->set_text(
+                        i_text  = i_text
+                    ).
+
+                    lo_http_response = lo_http_client->execute(
+                        i_method   = if_web_http_client=>post
+                    ).
+
+                    text                      = lo_http_response->get_text( ).
+                    status                    = lo_http_response->get_status( ).
+                    response_header_fields    = lo_http_response->get_header_fields( ).
+
+                ENDLOOP.
+
+*               For using in SAVE_MODIFY to Refresh Items and Sizes Tables
+                zbp_i_product_001=>mapped_product_uuid = <entity>-ProductUUID.
+
+            ENDIF.
+
+            IF ( <entity>-%is_draft = '01' ). " Draft
+                APPEND VALUE #( %key = <entity>-%key %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error text = 'Data not saved.' ) ) TO reported-product.
+                RETURN.
+            ENDIF.
+
+        ENDLOOP.
+
+    CATCH cx_web_message_error INTO DATA(lx_web_message_error).
+      " Handle Exception
+*      RAISE SHORTDUMP lx_web_message_error.
+
+    CATCH cx_abap_context_info_error INTO DATA(lx_abap_context_info_error).
+      " Handle Exception
+*      RAISE SHORTDUMP lx_abap_context_info_error.
+
+    CATCH /iwbep/cx_cp_remote INTO DATA(lx_cp_remote).
+      " Handle remote Exception
+*      RAISE SHORTDUMP lx_cp_remote.
+
+    CATCH /iwbep/cx_gateway INTO DATA(lx_gateway).
+      " Handle Exception
+*      RAISE SHORTDUMP lx_gateway.
+
+    CATCH cx_web_http_client_error INTO DATA(lx_web_http_client_error).
+      " Handle Exception
+*      RAISE SHORTDUMP lx_web_http_client_error.
+
+    CATCH cx_http_dest_provider_error INTO DATA(lx_http_dest_provider_error).
+        "handle exception
+*      RAISE SHORTDUMP lx_http_dest_provider_error.
+
+    ENDTRY.
+
+  ENDMETHOD. " create_products_via_api
+
 *   Internal methods:
 
 * Convert Sizes to Items (generate Items according to Size table)
@@ -2182,352 +2536,11 @@ CLASS lhc_Product IMPLEMENTATION.
         ENDLOOP.
     ENDLOOP.
 
-**   Add New Items based on Actual Size table (obsolete)
-*    LOOP AT lt_size INTO DATA(wa_size).
-**        IF ( ( wa_size-a IS NOT INITIAL ) AND ( ls_sizehead2-a IS NOT INITIAL ) ).
-*        IF ( ( wa_size-a02 = 'X' ) AND ( ls_sizehead2-a IS NOT INITIAL ) ).
-*            maxid = maxid + 1.
-*            cid = maxid.
-*            backsize    = ls_sizehead2-a.
-*            cupsize     = wa_size-backsizeid.
-*            product     = model && '-' && color && '-' && cupsize && '-' && backsize.
-**            quantity    = wa_size-a.
-*            productURL  = '/ui#Material-manage&/C_Product(Product=''' && product && ''',DraftUUID=guid''00000000-0000-0000-0000-000000000000'',IsActiveEntity=true)'.
-*            wa_item_create = VALUE #(
-*                %is_draft  = is_draft
-*                ProductUUID = i_productuuid
-*                %target = VALUE #( (
-*                    %is_draft       = is_draft
-*                    %cid            = cid
-*                    ItemID          = cid
-*                    ProductUUID     = i_productuuid
-*                    Cupsize         = cupsize
-*                    Backsize        = backsize
-*                    Model           = model
-*                    Color           = color
-*                    Product         = product
-*                    Criticality01   = criticality
-*                    ProductURL      = productURL
-*                ) )
-*            ).
-*            APPEND wa_item_create TO it_item_create.
-*        ENDIF.
-**        IF ( ( wa_size-b IS NOT INITIAL ) AND ( ls_sizehead2-b IS NOT INITIAL ) ).
-*        IF ( ( wa_size-b02 = 'X' ) AND ( ls_sizehead2-b IS NOT INITIAL ) ).
-*            maxid = maxid + 1.
-*            cid = maxid.
-*            backsize    = ls_sizehead2-b.
-*            cupsize     = wa_size-backsizeid.
-*            quantity    = wa_size-b.
-*            product     = model && '-' && color && '-' && cupsize && '-' && backsize.
-*            productURL  = '/ui#Material-manage&/C_Product(Product=''' && product && ''',DraftUUID=guid''00000000-0000-0000-0000-000000000000'',IsActiveEntity=true)'.
-*            wa_item_create = VALUE #(
-*                %is_draft  = is_draft
-*                ProductUUID = i_productuuid
-*                %target = VALUE #( (
-*                    %is_draft       = is_draft
-*                    %cid            = cid
-*                    ItemID          = cid
-*                    ProductUUID     = i_productuuid
-*                    Cupsize         = cupsize
-*                    Backsize        = backsize
-*                    Model           = model
-*                    Color           = color
-*                    Product         = product
-*                    Criticality01   = criticality
-*                    ProductURL      = productURL
-*                ) )
-*            ).
-*            APPEND wa_item_create TO it_item_create.
-*        ENDIF.
-**        IF ( ( wa_size-c IS NOT INITIAL ) AND ( ls_sizehead2-c IS NOT INITIAL ) ).
-*        IF ( ( wa_size-c02 = 'X' ) AND ( ls_sizehead2-c IS NOT INITIAL ) ).
-*            maxid = maxid + 1.
-*            cid = maxid.
-*            backsize    = ls_sizehead2-c.
-*            cupsize     = wa_size-backsizeid.
-*            quantity    = wa_size-c.
-*            product     = model && '-' && color && '-' && cupsize && '-' && backsize.
-*            productURL  = '/ui#Material-manage&/C_Product(Product=''' && product && ''',DraftUUID=guid''00000000-0000-0000-0000-000000000000'',IsActiveEntity=true)'.
-*            wa_item_create = VALUE #(
-*                %is_draft  = is_draft
-*                ProductUUID = i_productuuid
-*                %target = VALUE #( (
-*                    %is_draft       = is_draft
-*                    %cid            = cid
-*                    ItemID          = cid
-*                    ProductUUID     = i_productuuid
-*                    Cupsize         = cupsize
-*                    Backsize        = backsize
-*                    Model           = model
-*                    Color           = color
-*                    Product         = product
-*                    Criticality01   = criticality
-*                    ProductURL      = productURL
-*                ) )
-*            ).
-*            APPEND wa_item_create TO it_item_create.
-*        ENDIF.
-*        IF ( ( wa_size-d IS NOT INITIAL ) AND ( ls_sizehead2-d IS NOT INITIAL ) ).
-*            maxid = maxid + 1.
-*            cid = maxid.
-*            backsize    = ls_sizehead2-d.
-*            cupsize     = wa_size-backsizeid.
-*            quantity    = wa_size-d.
-*            product     = model && '-' && color && '-' && cupsize && '-' && backsize.
-**            productURL  = '/ui#Material-displayFactSheet&/C_ProductObjPg(''' && product && ''')'. " '0205286-705-H-075'
-*            productURL  = '/ui#Material-manage&/C_Product(Product=''' && product && ''',DraftUUID=guid''00000000-0000-0000-0000-000000000000'',IsActiveEntity=true)'.
-*            wa_item_create = VALUE #(
-*                %is_draft  = is_draft
-*                ProductUUID = i_productuuid
-*                %target = VALUE #( (
-*                    %is_draft       = is_draft
-*                    %cid            = cid
-*                    ItemID          = cid
-*                    ProductUUID     = i_productuuid
-*                    Cupsize         = cupsize
-*                    Backsize        = backsize
-*                    Model           = model
-*                    Color           = color
-*                    Product         = product
-*                    Criticality01   = criticality
-*                    ProductURL      = productURL
-*                ) )
-*            ).
-*            APPEND wa_item_create TO it_item_create.
-*        ENDIF.
-*        IF ( ( wa_size-e IS NOT INITIAL ) AND ( ls_sizehead2-e IS NOT INITIAL ) ).
-*            maxid = maxid + 1.
-*            cid = maxid.
-*            backsize    = ls_sizehead2-e.
-*            cupsize     = wa_size-backsizeid.
-*            quantity    = wa_size-e.
-*            product     = model && '-' && color && '-' && cupsize && '-' && backsize.
-**            productURL  = '/ui#Material-displayFactSheet&/C_ProductObjPg(''' && product && ''')'. " '0205286-705-H-075'
-*            productURL  = '/ui#Material-manage&/C_Product(Product=''' && product && ''',DraftUUID=guid''00000000-0000-0000-0000-000000000000'',IsActiveEntity=true)'.
-*            wa_item_create = VALUE #(
-*                %is_draft  = is_draft
-*                ProductUUID = i_productuuid
-*                %target = VALUE #( (
-*                    %is_draft       = is_draft
-*                    %cid            = cid
-*                    ItemID          = cid
-*                    ProductUUID     = i_productuuid
-*                    Cupsize         = cupsize
-*                    Backsize        = backsize
-*                    Model           = model
-*                    Color           = color
-*                    Product         = product
-*                    Criticality01   = criticality
-*                    ProductURL      = productURL
-*                ) )
-*            ).
-*            APPEND wa_item_create TO it_item_create.
-*        ENDIF.
-*        IF ( ( wa_size-f IS NOT INITIAL ) AND ( ls_sizehead2-f IS NOT INITIAL ) ).
-*            maxid = maxid + 1.
-*            cid = maxid.
-*            backsize    = ls_sizehead2-f.
-*            cupsize     = wa_size-backsizeid.
-*            quantity    = wa_size-f.
-*            product     = model && '-' && color && '-' && cupsize && '-' && backsize.
-**            productURL  = '/ui#Material-displayFactSheet&/C_ProductObjPg(''' && product && ''')'. " '0205286-705-H-075'
-*            productURL  = '/ui#Material-manage&/C_Product(Product=''' && product && ''',DraftUUID=guid''00000000-0000-0000-0000-000000000000'',IsActiveEntity=true)'.
-*            wa_item_create = VALUE #(
-*                %is_draft  = is_draft
-*                ProductUUID = i_productuuid
-*                %target = VALUE #( (
-*                    %is_draft       = is_draft
-*                    %cid            = cid
-*                    ItemID          = cid
-*                    ProductUUID     = i_productuuid
-*                    Cupsize         = cupsize
-*                    Backsize        = backsize
-*                    Model           = model
-*                    Color           = color
-*                    Product         = product
-*                    Criticality01   = criticality
-*                    ProductURL      = productURL
-*                ) )
-*            ).
-*            APPEND wa_item_create TO it_item_create.
-*        ENDIF.
-*        IF ( ( wa_size-g IS NOT INITIAL ) AND ( ls_sizehead2-g IS NOT INITIAL ) ).
-*            maxid = maxid + 1.
-*            cid = maxid.
-*            backsize    = ls_sizehead2-g.
-*            cupsize     = wa_size-backsizeid.
-*            quantity    = wa_size-g.
-*            product     = model && '-' && color && '-' && cupsize && '-' && backsize.
-**            productURL  = '/ui#Material-displayFactSheet&/C_ProductObjPg(''' && product && ''')'. " '0205286-705-H-075'
-*            productURL  = '/ui#Material-manage&/C_Product(Product=''' && product && ''',DraftUUID=guid''00000000-0000-0000-0000-000000000000'',IsActiveEntity=true)'.
-*            wa_item_create = VALUE #(
-*                %is_draft  = is_draft
-*                ProductUUID = i_productuuid
-*                %target = VALUE #( (
-*                    %is_draft       = is_draft
-*                    %cid            = cid
-*                    ItemID          = cid
-*                    ProductUUID     = i_productuuid
-*                    Cupsize         = cupsize
-*                    Backsize        = backsize
-*                    Model           = model
-*                    Color           = color
-*                    Product         = product
-*                    Criticality01   = criticality
-*                    ProductURL      = productURL
-*                ) )
-*            ).
-*            APPEND wa_item_create TO it_item_create.
-*        ENDIF.
-*        IF ( ( wa_size-h IS NOT INITIAL ) AND ( ls_sizehead2-h IS NOT INITIAL ) ).
-*            maxid = maxid + 1.
-*            cid = maxid.
-*            backsize    = ls_sizehead2-h.
-*            cupsize     = wa_size-backsizeid.
-*            quantity    = wa_size-h.
-*            product     = model && '-' && color && '-' && cupsize && '-' && backsize.
-**            productURL  = '/ui#Material-displayFactSheet&/C_ProductObjPg(''' && product && ''')'. " '0205286-705-H-075'
-*            productURL  = '/ui#Material-manage&/C_Product(Product=''' && product && ''',DraftUUID=guid''00000000-0000-0000-0000-000000000000'',IsActiveEntity=true)'.
-*            wa_item_create = VALUE #(
-*                %is_draft  = is_draft
-*                ProductUUID = i_productuuid
-*                %target = VALUE #( (
-*                    %is_draft       = is_draft
-*                    %cid            = cid
-*                    ItemID          = cid
-*                    ProductUUID     = i_productuuid
-*                    Cupsize         = cupsize
-*                    Backsize        = backsize
-*                    Model           = model
-*                    Color           = color
-*                    Product         = product
-*                    Criticality01   = criticality
-*                    ProductURL      = productURL
-*                ) )
-*            ).
-*            APPEND wa_item_create TO it_item_create.
-*        ENDIF.
-*        IF ( ( wa_size-i IS NOT INITIAL ) AND ( ls_sizehead2-i IS NOT INITIAL ) ).
-*            maxid = maxid + 1.
-*            cid = maxid.
-*            backsize    = ls_sizehead2-i.
-*            cupsize     = wa_size-backsizeid.
-*            quantity    = wa_size-i.
-*            product     = model && '-' && color && '-' && cupsize && '-' && backsize.
-**            productURL  = '/ui#Material-displayFactSheet&/C_ProductObjPg(''' && product && ''')'. " '0205286-705-H-075'
-*            productURL  = '/ui#Material-manage&/C_Product(Product=''' && product && ''',DraftUUID=guid''00000000-0000-0000-0000-000000000000'',IsActiveEntity=true)'.
-*            wa_item_create = VALUE #(
-*                %is_draft  = is_draft
-*                ProductUUID = i_productuuid
-*                %target = VALUE #( (
-*                    %is_draft       = is_draft
-*                    %cid            = cid
-*                    ItemID          = cid
-*                    ProductUUID     = i_productuuid
-*                    Cupsize         = cupsize
-*                    Backsize        = backsize
-*                    Model           = model
-*                    Color           = color
-*                    Product         = product
-*                    Criticality01   = criticality
-*                    ProductURL      = productURL
-*                ) )
-*            ).
-*            APPEND wa_item_create TO it_item_create.
-*        ENDIF.
-*        IF ( ( wa_size-j IS NOT INITIAL ) AND ( ls_sizehead2-j IS NOT INITIAL ) ).
-*            maxid = maxid + 1.
-*            cid = maxid.
-*            backsize    = ls_sizehead2-j.
-*            cupsize     = wa_size-backsizeid.
-*            quantity    = wa_size-j.
-*            product     = model && '-' && color && '-' && cupsize && '-' && backsize.
-**            productURL  = '/ui#Material-displayFactSheet&/C_ProductObjPg(''' && product && ''')'. " '0205286-705-H-075'
-*            productURL  = '/ui#Material-manage&/C_Product(Product=''' && product && ''',DraftUUID=guid''00000000-0000-0000-0000-000000000000'',IsActiveEntity=true)'.
-*            wa_item_create = VALUE #(
-*                %is_draft  = is_draft
-*                ProductUUID = i_productuuid
-*                %target = VALUE #( (
-*                    %is_draft       = is_draft
-*                    %cid            = cid
-*                    ItemID          = cid
-*                    ProductUUID     = i_productuuid
-*                    Cupsize         = cupsize
-*                    Backsize        = backsize
-*                    Model           = model
-*                    Color           = color
-*                    Product         = product
-*                    Criticality01   = criticality
-*                    ProductURL      = productURL
-*                ) )
-*            ).
-*            APPEND wa_item_create TO it_item_create.
-*        ENDIF.
-*        IF ( ( wa_size-k IS NOT INITIAL ) AND ( ls_sizehead2-k IS NOT INITIAL ) ).
-*            maxid = maxid + 1.
-*            cid = maxid.
-*            backsize    = ls_sizehead2-k.
-*            cupsize     = wa_size-backsizeid.
-*            quantity    = wa_size-k.
-*            product     = model && '-' && color && '-' && cupsize && '-' && backsize.
-**            productURL  = '/ui#Material-displayFactSheet&/C_ProductObjPg(''' && product && ''')'. " '0205286-705-H-075'
-*            productURL  = '/ui#Material-manage&/C_Product(Product=''' && product && ''',DraftUUID=guid''00000000-0000-0000-0000-000000000000'',IsActiveEntity=true)'.
-*            wa_item_create = VALUE #(
-*                %is_draft  = is_draft
-*                ProductUUID = i_productuuid
-*                %target = VALUE #( (
-*                    %is_draft       = is_draft
-*                    %cid            = cid
-*                    ItemID          = cid
-*                    ProductUUID     = i_productuuid
-*                    Cupsize         = cupsize
-*                    Backsize        = backsize
-*                    Model           = model
-*                    Color           = color
-*                    Product         = product
-*                    Criticality01   = criticality
-*                    ProductURL      = productURL
-*                ) )
-*            ).
-*            APPEND wa_item_create TO it_item_create.
-*        ENDIF.
-*        IF ( ( wa_size-l IS NOT INITIAL ) AND ( ls_sizehead2-l IS NOT INITIAL ) ).
-*            maxid = maxid + 1.
-*            cid = maxid.
-*            backsize    = ls_sizehead2-l.
-*            cupsize     = wa_size-backsizeid.
-*            quantity    = wa_size-l.
-*            product     = model && '-' && color && '-' && cupsize && '-' && backsize.
-**            productURL  = '/ui#Material-displayFactSheet&/C_ProductObjPg(''' && product && ''')'. " '0205286-705-H-075'
-*            productURL  = '/ui#Material-manage&/C_Product(Product=''' && product && ''',DraftUUID=guid''00000000-0000-0000-0000-000000000000'',IsActiveEntity=true)'.
-*            wa_item_create = VALUE #(
-*                %is_draft  = is_draft
-*                ProductUUID = i_productuuid
-*                %target = VALUE #( (
-*                    %is_draft       = is_draft
-*                    %cid            = cid
-*                    ItemID          = cid
-*                    ProductUUID     = i_productuuid
-*                    Cupsize         = cupsize
-*                    Backsize        = backsize
-*                    Model           = model
-*                    Color           = color
-*                    Product         = product
-*                    Criticality01   = criticality
-*                    ProductURL      = productURL
-*                ) )
-*            ).
-*            APPEND wa_item_create TO it_item_create.
-*        ENDIF.
-*
-*    ENDLOOP.
-
     " Create New Items
     MODIFY ENTITIES OF zi_product_001 IN LOCAL MODE
         ENTITY Product
         CREATE BY \_Item
-        FIELDS ( ProductUUID ItemID Model Color Backsize Cupsize Product Criticality01 ProductURL )
+        FIELDS ( ProductUUID ItemID Model Color Backsize Cupsize Product Criticality01 ProductURL Status )
         WITH it_item_create
         FAILED DATA(ls_failed2)
         MAPPED DATA(ls_mapped2)
@@ -2551,6 +2564,8 @@ CLASS lhc_Product IMPLEMENTATION.
     SORT lt_item2 STABLE BY Product.
 
     LOOP AT lt_item2 INTO DATA(ls_item2).
+
+*       Update Item ID
         MODIFY ENTITIES OF zi_product_001 IN LOCAL MODE
             ENTITY Item
             UPDATE FIELDS (
@@ -2566,6 +2581,9 @@ CLASS lhc_Product IMPLEMENTATION.
             REPORTED DATA(ls_reported3).
 
     ENDLOOP.
+
+*   Update Statuses
+    check_items_internal( i_productuuid = i_productuuid ).
 
   ENDMETHOD. " sizes_to_items_internal
 
@@ -2630,19 +2648,104 @@ CLASS lhc_Product IMPLEMENTATION.
 
         exists = abap_false.
         IF ( i_product IS NOT INITIAL ).
+
+*           Convert into Internal Format
+            DATA product(18) TYPE C.
+            product = |{ i_product ALPHA = IN }|.
+
             READ ENTITIES OF I_ProductTP_2
                 ENTITY Product
                 FIELDS ( Product IsMarkedForDeletion )
-                WITH VALUE #( ( %key-Product = i_product ) )
+                WITH VALUE #( ( %key-Product = product ) )
                 RESULT DATA(lt_product)
-                FAILED DATA(ls_failed)
-                REPORTED DATA(ls_reported).
+                FAILED DATA(failed)
+                REPORTED DATA(reported).
             LOOP AT lt_product INTO DATA(ls_product) WHERE ( IsMarkedForDeletion = abap_false ).
                 exists = abap_true.
             ENDLOOP.
+
         ENDIF.
 
   ENDMETHOD. " check_product_internal
+
+  METHOD check_product_via_api_internal.
+
+    DATA i_url      TYPE string.
+    DATA i_username TYPE string.
+    DATA i_password TYPE string.
+
+    exists = abap_false.
+    IF ( i_product IS INITIAL ).
+        RETURN.
+    ENDIF.
+
+*   DATA(i_url) = 'https://my404930-api.s4hana.cloud.sap:443/sap/opu/odata/sap/API_PRODUCT_SRV/A_Product'.
+
+    TRY.
+
+        DATA(system_url) = cl_abap_context_info=>get_system_url( ).
+
+        IF ( system_url(8) = 'my404930' ). " dev dev
+            i_url       = 'https://my404930-api.s4hana.cloud.sap/sap/opu/odata/sap/API_PRODUCT_SRV/A_Product'.
+            i_username  = 'INBOUND_USER'.
+            i_password  = 'rtrVDDgelabtTjUiybRX}tVD3JksqqfvPpBdJRaL'.
+        ENDIF.
+        IF ( system_url(8) = 'my404898' ). " dev cust
+            i_url       = 'https://my404898-api.s4hana.cloud.sap/sap/opu/odata/sap/API_PRODUCT_SRV/A_Product'.
+            i_username  = 'INBOUND_USER'.
+            i_password  = 'rtrVDDgelabtTjUiybRX}tVD3JksqqfvPpBdJRaL'.
+        ENDIF.
+        IF ( system_url(8) = 'my404907' ). " test
+            i_url       = 'https://my404907-api.s4hana.cloud.sap/sap/opu/odata/sap/API_PRODUCT_SRV/A_Product'.
+            i_username  = 'INBOUND_USER'.
+            i_password  = 'rtrVDDgelabtTjUiybRX}tVD3JksqqfvPpBdJRaL'.
+        ENDIF.
+        IF ( system_url(8) = 'my410080' ). " prod
+            i_url       = 'https://my410080-api.s4hana.cloud.sap/sap/opu/odata/sap/API_PRODUCT_SRV/A_Product'.
+            i_username  = 'INBOUND_USER'.
+            i_password  = 'YKXMYdjNnGgqko&aEueVx5mHTFPRGcDGAVgQgnFh'.
+        ENDIF.
+
+*       Get Product:
+
+        CONCATENATE i_url '(''' i_product ''')' INTO DATA(i_url1).
+
+*       https://my404898-api.s4hana.cloud.sap/sap/opu/odata/sap/API_PRODUCT_SRV/A_Product('1111111115')
+        DATA(http_destination1) = cl_http_destination_provider=>create_by_url( i_url1 ).
+
+        DATA(lo_http_client1) = cl_web_http_client_manager=>create_by_http_destination( http_destination1 ).
+
+        lo_http_client1->get_http_request( )->set_authorization_basic(
+            i_username = i_username
+            i_password = i_password
+        ).
+
+        DATA(lo_http_request1) = lo_http_client1->get_http_request( ).
+
+        DATA(lo_http_response1) = lo_http_client1->execute(
+            i_method   = if_web_http_client=>get
+        ).
+
+        DATA(text1)                   = lo_http_response1->get_text( ).
+        DATA(status1)                 = lo_http_response1->get_status( ).
+        DATA(response_header_fields1) = lo_http_response1->get_header_fields( ).
+
+        IF ( status1-code = '200' ). " exists
+            exists = abap_true.
+        ENDIF.
+
+      CATCH cx_abap_context_info_error.
+        "handle exception
+
+      CATCH cx_http_dest_provider_error.
+        "handle exception
+
+      CATCH cx_web_http_client_error.
+        "handle exception
+
+    ENDTRY.
+
+  ENDMETHOD. " check_product_via_api_internal
 
   METHOD check_sizes_internal.
 
@@ -3307,76 +3410,6 @@ CLASS lhc_Product IMPLEMENTATION.
 
   ENDMETHOD. " update_sizes_internal
 
-* Update Items
-  METHOD update_items.
-
-    " read transfered instances
-    READ ENTITIES OF zi_product_001 IN LOCAL MODE
-      ENTITY Product
-      ALL FIELDS
-      WITH CORRESPONDING #( keys )
-      RESULT DATA(entities).
-
-    LOOP AT entities ASSIGNING FIELD-SYMBOL(<entity>).
-
-        IF ( <entity>-%is_draft = '00' ). " Saved
-        ENDIF.
-
-        IF ( <entity>-%is_draft = '01' ). " Draft
-
-*           Disable Copy Color Mode
-            MODIFY ENTITIES OF zi_product_001 IN LOCAL MODE
-                ENTITY Product
-                UPDATE FIELDS ( Copying )
-                WITH VALUE #( (
-                    %is_draft           = <entity>-%is_draft
-                    %key                = <entity>-%key
-                    Copying             = abap_false
-                ) )
-                FAILED DATA(ls_failed)
-                MAPPED DATA(ls_mapped)
-                REPORTED DATA(ls_reported).
-
-*           Read Actual Matrix
-            SELECT SINGLE * FROM zproduct001  WHERE ( productuuid = @<entity>-ProductUUID ) INTO @DATA(wa_matrix).
-
-*           Read Matrix Draft
-            SELECT SINGLE * FROM zproduct001d WHERE ( productuuid = @<entity>-ProductUUID ) INTO @DATA(wa_matrix_draft).
-
-            IF ( <entity>-Copying = abap_true ). " Copy Color
-*               If model/color changed - do not generate items (change scheme instead)
-                IF ( ( <entity>-model <> wa_matrix-model ) ).
-*                    APPEND VALUE #( %key = <entity>-%key %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error text = 'Model changed - Save Data.' ) ) TO reported-matrix.
-*                    RETURN.
-                ENDIF.
-            ELSE. " Default Behavior
-*               If model/color changed - do not generate items (change scheme instead)
-                IF ( ( <entity>-model <> wa_matrix-model ) OR ( <entity>-color <> wa_matrix-color ) ).
-*                    APPEND VALUE #( %key = <entity>-%key %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error text = 'Model/Color changed - Save Data.' ) ) TO reported-matrix.
-*                    RETURN.
-                ENDIF.
-            ENDIF.
-
-        ENDIF.
-
-*       If model/color invalid - do not generate items
-*        IF ( ( <entity>-Model IS INITIAL ) OR ( <entity>-Color IS INITIAL ) ).
-*            APPEND VALUE #( %key = <entity>-%key %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error text = 'Model/Color invalid - Fix Data.' ) ) TO reported-matrix.
-*            RETURN.
-*        ENDIF.
-
-*       Convert Sizes To Items ((Re)Generate Items)
-        sizes_to_items_internal(
-            is_draft        = <entity>-%is_draft
-            i_productuuid   = <entity>-ProductUUID
-            i_model         = <entity>-Model
-            i_color         = <entity>-Color
-        ).
-
-    ENDLOOP.
-
-  ENDMETHOD. " update_items
-
 ENDCLASS. " lhc_Product IMPLEMENTATION
 
 
@@ -3424,6 +3457,10 @@ CLASS lsc_zi_product_001 IMPLEMENTATION.
 * Internal Methods:
 
   METHOD check_product_internal. " Check the Material (exists or does not)
+
+        DATA product TYPE I_Product-Product.
+        product = |{ i_product ALPHA = IN }|.
+*        CONDENSE product NO-GAPS.
 
         exists = abap_false.
         IF ( i_product IS NOT INITIAL ).

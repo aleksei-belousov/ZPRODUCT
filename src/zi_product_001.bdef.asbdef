@@ -15,14 +15,9 @@ etag master LocalLastChangedAt
   delete;
 
   // Actions:
-//  action check_atp;
   action update_items;
-//  action copy_color;
   action create_products;
-//  action get_sales_order;
-//  action update_sales_order;
-//  action check_sizes;
-//  action check_products;
+  action create_products_via_api;
 
   association _SizeHead { create ( features : instance, authorization : update ); with draft; }
   association _Size     { create ( features : instance, authorization : update ); with draft; }
@@ -51,14 +46,9 @@ etag master LocalLastChangedAt
     field Color affects entity _Size;
     field MatrixTypeID affects entity _Size;
     field Country affects entity _Size;
-//    action check_atp affects entity _Item;
     action update_items affects entity _Item;
-//    action copy_color affects entity _Item;
-//    action create_sales_order affects field SalesOrderID, field SalesOrderURL;
-//    action get_sales_order affects field SalesOrderID, field SalesOrderURL, entity _Item, entity _Size;
     action create_products affects entity _Item, entity _Size;
-//    action check_products affects entity _Item, entity _Size;
-//    action Activate affects entity _Item, entity _Size;
+    action create_products_via_api affects entity _Item, entity _Size;
     determine action Prepare executed on $self affects $self;
   }
 

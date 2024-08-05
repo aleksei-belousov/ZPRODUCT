@@ -234,13 +234,13 @@ annotate entity ZC_PRODUCT_001  with
     @UI.hidden: true
     ProductUUID;
 
-    @UI: { lineItem:          [ { position: 20, label: 'Product ID' } ],
-           identification:    [ { position: 20, label: 'Product ID' },
-                                { type: #FOR_ACTION, dataAction: 'update_items',    label: 'Update Items',      position: 1 },
-                                { type: #FOR_ACTION, dataAction: 'create_products', label: 'Create Products',   position: 2 } ]
+    @UI: { lineItem:          [ { position: 20, label: 'ID' } ],
+           identification:    [ { position: 20, label: 'ID' },
+                                { type: #FOR_ACTION, dataAction: 'update_items',            label: 'Update Items',      position: 1 },
+                                { type: #FOR_ACTION, dataAction: 'create_products_via_api', label: 'Create Products',   position: 2 } ]
     }
     @Search.defaultSearchElement: true
-    @UI.hidden: true
+    //@UI.hidden: true
     ProductID;
 
     @UI: { lineItem:          [ { position: 30, label: 'Product Type' } ],

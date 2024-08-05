@@ -17,6 +17,7 @@ define behavior for ZC_PRODUCT_001 alias Product
 
   use action update_items;
   use action create_products;
+  use action create_products_via_api;
 
   use association _SizeHead { /*create;*/ with draft; }
   use association _Size { /*create;*/ with draft; }
