@@ -2187,7 +2187,6 @@ CLASS lhc_Product IMPLEMENTATION.
                     RETURN.
                 ELSE.
                     APPEND VALUE #( %key = <entity>-%key %msg = new_message_with_text( severity = if_abap_behv_message=>severity-success text = 'The Source Product is OK.' ) ) TO reported-product.
-*                    RETURN.
                 ENDIF.
 
 *               Get Source Product:
@@ -2293,7 +2292,6 @@ CLASS lhc_Product IMPLEMENTATION.
                     FAILED DATA(failed1)
                     REPORTED DATA(reported1).
 
-*               APPEND VALUE #( Product  = '1111111121' ) TO lt_item. " for testing
                 LOOP AT lt_item INTO DATA(item) WHERE ( Status IS INITIAL ).
 
                     DATA i_fields TYPE if_web_http_request=>name_value_pairs.
@@ -2316,28 +2314,11 @@ CLASS lhc_Product IMPLEMENTATION.
                     ).
 
                     DATA i_text TYPE string.
-*                    CONCATENATE
-*                            '{'
-*                            '   "Product":"1111111121",'
-*                            '   "ProductType":"HAWA",'
-*                            '   "BaseUnit":"EA",'
-*                            '   "to_Description":{'
-*                            '       "results":['
-*                            '           {'
-*                            '               "Product":"1111111121",'
-*                            '               "Language":"E",'
-*                            '               "ProductDescription":"TEST 8 Desciption"'
-*                            '           }'
-*                            '       ]'
-*                            '   }'
-*                            '}'
-*                        INTO
-*                            i_text.
+
                     i_text = text1.
                     CONCATENATE '"Product":"' <entity>-SourceProduct    '"' INTO DATA(sourceTag).
                     CONCATENATE '"Product":"' item-Product              '"' INTO DATA(targetTag).
 
-*                    REPLACE ALL OCCURRENCES OF '"Product":"1111111115"' in i_text WITH '"Product":"1111111121"'.
                     REPLACE ALL OCCURRENCES OF sourceTag in i_text WITH targetTag.
 
                     lo_http_request->set_text(
@@ -2351,6 +2332,12 @@ CLASS lhc_Product IMPLEMENTATION.
                     text                      = lo_http_response->get_text( ).
                     status                    = lo_http_response->get_status( ).
                     response_header_fields    = lo_http_response->get_header_fields( ).
+
+                    IF ( status-code = '201' ).
+                        APPEND VALUE #( %key = <entity>-%key %msg = new_message_with_text( severity = if_abap_behv_message=>severity-success text = 'Product "' && item-Product && '" created.' ) ) TO reported-product.
+                    ELSE.
+                        APPEND VALUE #( %key = <entity>-%key %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error text = 'Product "' && item-Product && '" not created.' ) ) TO reported-product.
+                    ENDIF.
 
                 ENDLOOP.
 
@@ -2615,7 +2602,8 @@ CLASS lhc_Product IMPLEMENTATION.
         DATA(exists) = check_product_internal( product ).
         IF ( exists = abap_true ).
             status          = 'Exists'.
-            criticality01   = '1'. " Red
+*            criticality01   = '1'. " Red
+            criticality01   = '3'. " Green
         ELSE.
             status          = space.
             criticality01   = '0'. " None
@@ -2816,19 +2804,21 @@ CLASS lhc_Product IMPLEMENTATION.
             CONCATENATE model color cupsize backsize INTO product SEPARATED BY '-'.
             DATA(exists) = check_product_internal( product ).
             IF ( exists = abap_true ).
-                ls_size-(s2) = '1'.     " ls_size-Criticality01 " Red
+*                ls_size-(s2) = '1'.     " ls_size-Criticality01 " Red
+                ls_size-(s2) = '3'.     " ls_size-Criticality01 " Green
             ELSE.
                 ls_size-(s2) = '0'.     " ls_size-Criticality01 " None
             ENDIF.
             IF ( ls_size-(s3) <> 'X' ).
                 IF ( exists = abap_true ).
                     ls_size-(s3) = '-'. " ls_size-a02
+                    ls_size-(s2) = '1'. " ls_size-Criticality01 " Red
                 ELSE.
                     ls_size-(s3) = ' '. " ls_size-a02
                 ENDIF.
             ENDIF.
-
         ENDLOOP.
+
         APPEND VALUE #(
             %is_draft       = is_draft
             %key-SizeUUID   = ls_size-SizeUUID
@@ -3506,7 +3496,8 @@ CLASS lsc_zi_product_001 IMPLEMENTATION.
         DATA(exists) = check_product_internal( product ).
         IF ( exists = abap_true ).
             status          = 'Exists'.
-            criticality01   = '1'. " Red
+*            criticality01   = '1'. " Red
+            criticality01   = '3'. " Green
         ELSE.
             status          = space.
             criticality01   = '0'. " None
@@ -3581,14 +3572,24 @@ CLASS lsc_zi_product_001 IMPLEMENTATION.
         LOOP AT columns INTO DATA(column). " Back
             SPLIT column AT ':' INTO DATA(s1) DATA(s2).
             s2 = 'Criticality' && s2.
+            DATA(s3) = s1 && '02'.
             cupsize     = ls_size-BackSizeID.
             backsize    = ls_sizehead2-(s1). " ls_sizehead2-a
             CONCATENATE model color cupsize backsize INTO product SEPARATED BY '-'.
             DATA(exists) = check_product_internal( product ).
             IF ( exists = abap_true ).
-                ls_size-(s2) = '1'. " Red " ls_size-Criticality01
+*                ls_size-(s2) = '1'. " Red   " ls_size-Criticality01
+                ls_size-(s2) = '3'. " Green " ls_size-Criticality01
             ELSE.
                 ls_size-(s2) = '0'. " None
+            ENDIF.
+            IF ( ls_size-(s3) <> 'X' ).
+                IF ( exists = abap_true ).
+                    ls_size-(s3) = '-'. " ls_size-a02
+                    ls_size-(s2) = '1'. " ls_size-Criticality01 " Red
+                ELSE.
+                    ls_size-(s3) = ' '. " ls_size-a02
+                ENDIF.
             ENDIF.
         ENDLOOP.
 
