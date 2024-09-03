@@ -2316,10 +2316,44 @@ CLASS lhc_Product IMPLEMENTATION.
                     DATA i_text TYPE string.
 
                     i_text = text1.
-                    CONCATENATE '"Product":"' <entity>-SourceProduct    '"' INTO DATA(sourceTag).
-                    CONCATENATE '"Product":"' item-Product              '"' INTO DATA(targetTag).
 
+                    DATA sourceTag      TYPE string.
+                    DATA targetTag      TYPE string.
+                    DATA findStr        TYPE string.
+                    DATA targetValue    TYPE string.
+                    DATA sourceValue    TYPE string.
+
+*                   Replace Product
+                    CONCATENATE '"Product":"' <entity>-SourceProduct    '"' INTO sourceTag.
+                    CONCATENATE '"Product":"' item-Product              '"' INTO targetTag.
                     REPLACE ALL OCCURRENCES OF sourceTag in i_text WITH targetTag.
+
+*                   Replace Back Size FR
+                    findStr     = '"YY1_SizeFR_PRD":"'.
+                    targetValue = item-BackSizeFR.
+                    sourceValue = substring_after( val = i_text sub = findStr ).
+                    sourceValue = substring_before( val = sourceValue sub = '"' ).
+                    CONCATENATE findStr sourceValue '"' INTO sourceTag.
+                    CONCATENATE findStr targetValue '"' INTO targetTag.
+                    REPLACE FIRST OCCURRENCE OF sourceTag in i_text WITH targetTag.
+
+*                   Replace Back Size US
+                    findStr     = '"YY1_SizeUS_PRD":"'.
+                    targetValue = item-BackSizeUS.
+                    sourceValue = substring_after( val = i_text sub = findStr ).
+                    sourceValue = substring_before( val = sourceValue sub = '"' ).
+                    CONCATENATE findStr sourceValue '"' INTO sourceTag.
+                    CONCATENATE findStr targetValue '"' INTO targetTag.
+                    REPLACE FIRST OCCURRENCE OF sourceTag in i_text WITH targetTag.
+
+*                   Replace Back Size GB
+                    findStr     = '"YY1_SizeGB_PRD":"'.
+                    targetValue = item-BackSizeGB.
+                    sourceValue = substring_after( val = i_text sub = findStr ).
+                    sourceValue = substring_before( val = sourceValue sub = '"' ).
+                    CONCATENATE findStr sourceValue '"' INTO sourceTag.
+                    CONCATENATE findStr targetValue '"' INTO targetTag.
+                    REPLACE FIRST OCCURRENCE OF sourceTag in i_text WITH targetTag.
 
                     lo_http_request->set_text(
                         i_text  = i_text
@@ -2398,6 +2432,9 @@ CLASS lhc_Product IMPLEMENTATION.
     DATA color              TYPE string.
     DATA cupsize            TYPE string.
     DATA backsize           TYPE string.
+    DATA backsizefr         TYPE string.
+    DATA backsizeus         TYPE string.
+    DATA backsizegb         TYPE string.
     DATA product            TYPE string.
     DATA quantity           TYPE string.
     DATA stock              TYPE string.
@@ -2433,8 +2470,6 @@ CLASS lhc_Product IMPLEMENTATION.
         maxid = maxid_draft.
     ENDIF.
 
-*    model       = wa_matrix-Model.
-*    color       = wa_matrix-Color.
     model       = i_model.
     color       = i_color.
 
@@ -2483,6 +2518,25 @@ CLASS lhc_Product IMPLEMENTATION.
     READ TABLE lt_sizehead INTO DATA(ls_sizehead1) WITH KEY SizeHeadID = 1.
     READ TABLE lt_sizehead INTO DATA(ls_sizehead2) WITH KEY SizeHeadID = 2.
 
+
+*   Read Product (header)
+    READ ENTITIES OF zi_product_001 IN LOCAL MODE
+        ENTITY Product
+        ALL FIELDS WITH VALUE #( (
+            %is_draft   = is_draft
+            ProductUUID = i_productuuid
+        ) )
+        RESULT DATA(lt_product)
+        FAILED DATA(failed1)
+        REPORTED DATA(reported1).
+    READ TABLE lt_product INTO DATA(ls_product) INDEX 1.
+    IF ( sy-subrc = 0 ).
+*       Read Back Size Table
+        SELECT SINGLE * FROM zi_matrixtype_005  WHERE ( MatrixTypeID = @ls_product-MatrixTypeID ) INTO @DATA(wa_matrixtype).
+        SELECT * FROM zi_backsize_005 WHERE ( MatrixTypeUUID  = @wa_matrixtype-MatrixTypeUUID ) INTO TABLE @DATA(it_backsize).
+        SORT it_backsize STABLE BY BackSizeID.
+    ENDIF.
+
 *   Add New Items based on Size table (new)
     SPLIT zbp_i_product_001=>size_column_names AT space INTO TABLE DATA(columns).
     LOOP AT lt_size INTO DATA(ls_size). " Cup
@@ -2498,6 +2552,12 @@ CLASS lhc_Product IMPLEMENTATION.
                 cid = maxid.
                 CONDENSE cid.
                 backsize    = ls_sizehead2-(s1).
+                READ TABLE it_backsize INTO DATA(wa_backsize) WITH KEY BackSizeID = backsize.
+                IF (  sy-subrc = 0 ).
+                    backsizefr = wa_backsize-BackSizeFR.
+                    backsizeus = wa_backsize-BackSizeUS.
+                    backsizegb = wa_backsize-BackSizeGB.
+                ENDIF.
                 cupsize     = ls_size-backsizeid.
                 product     = model && '-' && color && '-' && cupsize && '-' && backsize.
 *                quantity    = value.
@@ -2511,7 +2571,10 @@ CLASS lhc_Product IMPLEMENTATION.
                         ItemID          = cid
                         ProductUUID     = i_productuuid
                         Cupsize         = cupsize
-                        Backsize        = backsize
+                        BackSize        = backsize
+                        BackSizeFR      = backsizefr
+                        BackSizeUS      = backsizeus
+                        BacksizeGB      = backsizegb
                         Model           = model
                         Color           = color
                         Product         = product
@@ -2527,7 +2590,7 @@ CLASS lhc_Product IMPLEMENTATION.
     MODIFY ENTITIES OF zi_product_001 IN LOCAL MODE
         ENTITY Product
         CREATE BY \_Item
-        FIELDS ( ProductUUID ItemID Model Color Backsize Cupsize Product Criticality01 ProductURL Status )
+        FIELDS ( ProductUUID ItemID Model Color BackSize BackSizeFR BackSizeUS BackSizeGB Cupsize Product Criticality01 ProductURL Status )
         WITH it_item_create
         FAILED DATA(ls_failed2)
         MAPPED DATA(ls_mapped2)

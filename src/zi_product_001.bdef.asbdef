@@ -55,7 +55,6 @@ etag master LocalLastChangedAt
 }
 
 define behavior for ZI_SIZEHEAD_001 alias SizeHead
-//implementation in class zbp_i_sizehead_001 unique
 persistent table zsizehead001
 draft table zsizehead001d
 lock dependent by _Product
@@ -74,7 +73,6 @@ etag master LocalLastChangedAt
 }
 
 define behavior for ZI_SIZE_001 alias Size
-//implementation in class zbp_i_size_001 unique
 persistent table zsize001
 draft table zsize001d
 lock dependent by _Product
@@ -111,7 +109,6 @@ etag master LocalLastChangedAt
 }
 
 define behavior for ZI_ITEM_001 alias Item
-//implementation in class zbp_i_item_001 unique
 persistent table zitem001
 draft table zitem001d
 lock dependent by _Product
@@ -128,6 +125,9 @@ etag master LocalLastChangedAt
   field ( readonly ) Color;
   field ( readonly ) CupSize;
   field ( readonly ) BackSize;
+  field ( readonly ) BackSizeFR;
+  field ( readonly ) BackSizeUS;
+  field ( readonly ) BackSizeGB;
   field ( readonly ) Product;
   field ( readonly ) Status;
   field ( readonly ) LocalLastChangedAt;

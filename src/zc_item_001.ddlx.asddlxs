@@ -55,8 +55,25 @@ annotate entity ZC_ITEM_001 with
     @UI.hidden: true
     CupSize;
 
-    @UI.hidden: true
+    @UI: {  lineItem:       [ { position: 70, label: 'Back Size', cssDefault.width: '150px' } ],
+            identification: [ { position: 70, label: 'Back Size' } ] }
+    //@UI.hidden: true
     BackSize;
+
+    @UI: {  lineItem:       [ { position: 80, label: 'Back Size FR', cssDefault.width: '150px' } ],
+            identification: [ { position: 80, label: 'Back Size FR' } ] }
+    //@UI.hidden: true
+    BackSizeFR;
+
+    @UI: {  lineItem:       [ { position: 90, label: 'Back Size US', cssDefault.width: '150px' } ],
+            identification: [ { position: 90, label: 'Back Size US' } ] }
+    //@UI.hidden: true
+    BackSizeUS;
+
+    @UI: {  lineItem:       [ { position: 100, label: 'Back Size GB', cssDefault.width: '150px' } ],
+            identification: [ { position: 100, label: 'Back Size GB' } ] }
+    //@UI.hidden: true
+    BackSizeGB;
 
     @UI.hidden: true
     Criticality01;

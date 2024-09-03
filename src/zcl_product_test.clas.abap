@@ -12,20 +12,14 @@ CLASS zcl_product_test DEFINITION PUBLIC FINAL CREATE PUBLIC. " * Starter Dev (T
     METHODS update_salestax IMPORTING out TYPE REF TO if_oo_adt_classrun_out.
     METHODS create_product_via_api IMPORTING out TYPE REF TO if_oo_adt_classrun_out.
     METHODS create_product_via_eml IMPORTING out TYPE REF TO if_oo_adt_classrun_out.
+    METHODS get_json_element IMPORTING out TYPE REF TO if_oo_adt_classrun_out.
 
-ENDCLASS. " zcl_product_test DEFINITION
+ENDCLASS.
+
+
 
 CLASS ZCL_PRODUCT_TEST IMPLEMENTATION.
 
-  METHOD if_oo_adt_classrun~main.
-
-*    create_product( out ).
-*    read_salestax( out ).
-*    update_salestax( out ).
-     create_product_via_api( out ).
-*     create_product_via_eml( out ).
-
-  ENDMETHOD. " main
 
   METHOD create_product.
 
@@ -428,119 +422,6 @@ CLASS ZCL_PRODUCT_TEST IMPLEMENTATION.
 
   ENDMETHOD. " create_product
 
-  METHOD read_salestax.
-
-*    READ ENTITIES OF I_ProductTP_2
-**       Product Sales Delivery - Sales Tax
-*        ENTITY ProductSalesDelivery BY \_ProdSalesDeliverySalesTax
-*        ALL FIELDS WITH VALUE #( (
-*            %key-Product                 = '0000301-030-C-080'
-*            %key-ProductSalesOrg         = '1000'
-*            %key-ProductDistributionChnl = '10'
-*        ) )
-*        RESULT DATA(lt_salestax1) " 1 row
-*        FAILED DATA(ls_failed1)
-*        REPORTED DATA(ls_reported1).
-*
-*    Do not work
-*    READ ENTITIES OF I_ProductTP_2
-**       Product Sales Delivery Sales Tax
-*        ENTITY ProductSalesDeliverySalesTax
-*        ALL FIELDS WITH VALUE #( (
-*            %key-Country                 = 'CH'
-*            %key-Product                 = '0000301-030-C-080'
-*            %key-ProductSalesOrg         = '1000'
-*            %key-ProductDistributionChnl = '10'
-*            %key-ProductSalesTaxCategory = 'TTX1'
-*        ) )
-*        RESULT DATA(lt_salestax2) " 0 rows
-*        FAILED DATA(ls_failed2)
-*        REPORTED DATA(ls_reported2).
-*
-*    Do not work
-*    SELECT * FROM I_ProdSlsDeliverySalesTaxTP_2 WHERE ( Product = '0000301-030-C-080' ) INTO TABLE @DATA(it_salestax3).
-*
-*    SELECT * FROM I_ProductTaxClassification WHERE ( Product = '0000301-030-C-080' ) INTO TABLE @DATA(it_taxclassification3).
-*
-*    The use of element PRODUCT of CDS Entity I_PRODUCTSALESCOUNTRYWD is not permitted.
-*    SELECT * FROM I_ProductSalesCountryWD WHERE ( Product = '0000301-030-C-080' ) INTO TABLE @DATA(it_productsalescountrywd).
-
-    SELECT * FROM I_ProductSalesTax WHERE ( Product = '0000301-030-C-080' ) INTO TABLE @DATA(it_productsalestax).
-
-    LOOP AT it_productsalestax INTO DATA(wa_productsalestax).
-        out->write( wa_productsalestax ).
-    ENDLOOP.
-
-  ENDMETHOD. " read_salestax
-
-  METHOD update_salestax.
-
-*    Does not wowrk
-*    MODIFY ENTITIES OF I_ProductTP_2
-*        ENTITY ProductSalesDeliverySalesTax
-*        UPDATE FIELDS ( ProductTaxClassification )
-*        WITH VALUE #( ( %key-Product = '0000301-030-C-080'
-*                        %key-Country = 'CH'
-*                        %key-ProductSalesTaxCategory = 'TTX1'
-*                        %key-ProductSalesOrg = '1000'
-*                        %key-ProductDistributionChnl = '10'
-*                        ProductTaxClassification = '2' ) )
-*        REPORTED DATA(reported3)
-*        FAILED DATA(failed3).
-
-*   ProductSalesDelivery
-    DATA it_salestax_create TYPE TABLE FOR CREATE I_ProductTP_2\\ProductSalesDelivery\_ProdSalesDeliverySalesTax.
-
-*   Product - Sales Delivery - Sales Tax
-*    LOOP AT it_salestax INTO DATA(wa_salestax) WHERE ( ProductSalesOrg          = ls_sourceproductsalesdelivery-ProductSalesOrg ) AND
-*                                                     ( ProductDistributionChnl  = ls_sourceproductsalesdelivery-ProductDistributionChnl ).
-        DATA(product) = '0080505-003-B-075'.
-        DATA(cid2) = 'salestax1'.
-        CONDENSE cid2.
-        APPEND VALUE #(
-            %cid_ref                        = 'salesdelivery1'
-            %key-Product                    = product " '0000301-030-C-080'
-            %key-ProductSalesOrg            = '1000'
-            %key-ProductDistributionChnl    = '10'
-            %target = VALUE #( (
-                %cid    = 'salestax1'
-                Product = product " '0000301-030-C-080'
-                Country = 'CH'
-                ProductSalesTaxCategory = 'TTX1'
-                ProductSalesOrg = '1000'
-                ProductDistributionChnl = '10'
-                ProductTaxClassification = '2'
-            ) )
-        )
-        TO it_salestax_create[].
-
-*    ENDLOOP.
-
-    MODIFY ENTITIES OF I_ProductTP_2
-        ENTITY ProductSalesDelivery
-        CREATE BY \_ProdSalesDeliverySalesTax FIELDS (
-*            Product
-*            ProductSalesOrg
-*            ProductDistributionChnl
-            Country
-            ProductSalesTaxCategory
-            ProductTaxClassification
-        )
-        WITH it_salestax_create
-        MAPPED DATA(mapped)
-        REPORTED DATA(reported)
-        FAILED DATA(failed).
-
-*   It is obligatory:
-    COMMIT ENTITIES
-        RESPONSE OF I_ProductTP_2
-        FAILED DATA(failed_commit)
-        REPORTED DATA(reported_commit).
-
-    out->write( 'updated.' ).
-*    RETURN.
-
-  ENDMETHOD. " update_salestax
 
   METHOD create_product_via_api.
 
@@ -693,6 +574,7 @@ CLASS ZCL_PRODUCT_TEST IMPLEMENTATION.
 
   ENDMETHOD. " create_product_via_api
 
+
   METHOD create_product_via_eml. " for dev-cust only - does not work
 
     TRY.
@@ -752,5 +634,150 @@ CLASS ZCL_PRODUCT_TEST IMPLEMENTATION.
         REPORTED DATA(reported_commit).
 
   ENDMETHOD.
+
+
+  METHOD if_oo_adt_classrun~main.
+
+*    create_product( out ).
+*    read_salestax( out ).
+*    update_salestax( out ).
+*     create_product_via_api( out ).
+*     create_product_via_eml( out ).
+    get_json_element( out ).
+
+  ENDMETHOD. " main
+
+
+  METHOD read_salestax.
+
+*    READ ENTITIES OF I_ProductTP_2
+**       Product Sales Delivery - Sales Tax
+*        ENTITY ProductSalesDelivery BY \_ProdSalesDeliverySalesTax
+*        ALL FIELDS WITH VALUE #( (
+*            %key-Product                 = '0000301-030-C-080'
+*            %key-ProductSalesOrg         = '1000'
+*            %key-ProductDistributionChnl = '10'
+*        ) )
+*        RESULT DATA(lt_salestax1) " 1 row
+*        FAILED DATA(ls_failed1)
+*        REPORTED DATA(ls_reported1).
+*
+*    Do not work
+*    READ ENTITIES OF I_ProductTP_2
+**       Product Sales Delivery Sales Tax
+*        ENTITY ProductSalesDeliverySalesTax
+*        ALL FIELDS WITH VALUE #( (
+*            %key-Country                 = 'CH'
+*            %key-Product                 = '0000301-030-C-080'
+*            %key-ProductSalesOrg         = '1000'
+*            %key-ProductDistributionChnl = '10'
+*            %key-ProductSalesTaxCategory = 'TTX1'
+*        ) )
+*        RESULT DATA(lt_salestax2) " 0 rows
+*        FAILED DATA(ls_failed2)
+*        REPORTED DATA(ls_reported2).
+*
+*    Do not work
+*    SELECT * FROM I_ProdSlsDeliverySalesTaxTP_2 WHERE ( Product = '0000301-030-C-080' ) INTO TABLE @DATA(it_salestax3).
+*
+*    SELECT * FROM I_ProductTaxClassification WHERE ( Product = '0000301-030-C-080' ) INTO TABLE @DATA(it_taxclassification3).
+*
+*    The use of element PRODUCT of CDS Entity I_PRODUCTSALESCOUNTRYWD is not permitted.
+*    SELECT * FROM I_ProductSalesCountryWD WHERE ( Product = '0000301-030-C-080' ) INTO TABLE @DATA(it_productsalescountrywd).
+
+    SELECT * FROM I_ProductSalesTax WHERE ( Product = '0000301-030-C-080' ) INTO TABLE @DATA(it_productsalestax).
+
+    LOOP AT it_productsalestax INTO DATA(wa_productsalestax).
+        out->write( wa_productsalestax ).
+    ENDLOOP.
+
+  ENDMETHOD. " read_salestax
+
+
+  METHOD update_salestax.
+
+*    Does not wowrk
+*    MODIFY ENTITIES OF I_ProductTP_2
+*        ENTITY ProductSalesDeliverySalesTax
+*        UPDATE FIELDS ( ProductTaxClassification )
+*        WITH VALUE #( ( %key-Product = '0000301-030-C-080'
+*                        %key-Country = 'CH'
+*                        %key-ProductSalesTaxCategory = 'TTX1'
+*                        %key-ProductSalesOrg = '1000'
+*                        %key-ProductDistributionChnl = '10'
+*                        ProductTaxClassification = '2' ) )
+*        REPORTED DATA(reported3)
+*        FAILED DATA(failed3).
+
+*   ProductSalesDelivery
+    DATA it_salestax_create TYPE TABLE FOR CREATE I_ProductTP_2\\ProductSalesDelivery\_ProdSalesDeliverySalesTax.
+
+*   Product - Sales Delivery - Sales Tax
+*    LOOP AT it_salestax INTO DATA(wa_salestax) WHERE ( ProductSalesOrg          = ls_sourceproductsalesdelivery-ProductSalesOrg ) AND
+*                                                     ( ProductDistributionChnl  = ls_sourceproductsalesdelivery-ProductDistributionChnl ).
+        DATA(product) = '0080505-003-B-075'.
+        DATA(cid2) = 'salestax1'.
+        CONDENSE cid2.
+        APPEND VALUE #(
+            %cid_ref                        = 'salesdelivery1'
+            %key-Product                    = product " '0000301-030-C-080'
+            %key-ProductSalesOrg            = '1000'
+            %key-ProductDistributionChnl    = '10'
+            %target = VALUE #( (
+                %cid    = 'salestax1'
+                Product = product " '0000301-030-C-080'
+                Country = 'CH'
+                ProductSalesTaxCategory = 'TTX1'
+                ProductSalesOrg = '1000'
+                ProductDistributionChnl = '10'
+                ProductTaxClassification = '2'
+            ) )
+        )
+        TO it_salestax_create[].
+
+*    ENDLOOP.
+
+    MODIFY ENTITIES OF I_ProductTP_2
+        ENTITY ProductSalesDelivery
+        CREATE BY \_ProdSalesDeliverySalesTax FIELDS (
+*            Product
+*            ProductSalesOrg
+*            ProductDistributionChnl
+            Country
+            ProductSalesTaxCategory
+            ProductTaxClassification
+        )
+        WITH it_salestax_create
+        MAPPED DATA(mapped)
+        REPORTED DATA(reported)
+        FAILED DATA(failed).
+
+*   It is obligatory:
+    COMMIT ENTITIES
+        RESPONSE OF I_ProductTP_2
+        FAILED DATA(failed_commit)
+        REPORTED DATA(reported_commit).
+
+    out->write( 'updated.' ).
+*    RETURN.
+
+  ENDMETHOD. " update_salestax
+
+  METHOD get_json_element.
+
+    DATA(i_text)    = ',"YY1_Color_PRD":"123","YY1_SizeFR_PRD":"","YY1_SeriesName_PRD":"XYZ",'.
+    DATA findStr        TYPE string VALUE '"YY1_SizeFR_PRD":"'.
+    DATA targetValue    TYPE string VALUE 'QWERTY'.
+    DATA sourceValue    TYPE string.
+    DATA sourceTag      TYPE string.
+    DATA targetTag      TYPE string.
+    sourceValue = substring_after( val = i_text sub = findStr ).
+    sourceValue = substring_before( val = sourceValue sub = '"' ).
+    sourceTag = findStr && sourceValue && '"'.
+    targetTag = findStr && targetValue && '"'.
+    REPLACE FIRST OCCURRENCE OF sourceTag in i_text WITH targetTag.
+    out->write( i_text ).
+
+  ENDMETHOD. " get_json_element
 
 ENDCLASS.
